@@ -1,4 +1,5 @@
 var targetString = "Hello\rWorld !!";
+const targetTypedText = "targetTypedText";
 var records = [];
 var incorrectclicks = 0;
 var index = 0;
@@ -10,7 +11,8 @@ setInterval(() => {
   ViewTimer();
 }, 1000);
 
-function addKeyTyped(e) {
+function addKeyTyped(e) 
+{
   if (index >= targetString.length || gameOver)
     return;
   if (incorrectclicks >= 4)
@@ -20,20 +22,20 @@ function addKeyTyped(e) {
 
   var keycode = e.keycode || e.which;
   if (keycode == targetString.charCodeAt(index) && incorrectclicks == 0) {
-    document.getElementById("targetTypedText").children[index].classList = [];
-    document.getElementById("targetTypedText").children[index].classList.add("correct-color");
+    document.getElementById(targetTypedText).children[index].classList = [];
+    document.getElementById(targetTypedText).children[index].classList.add("correct-color");
     if (index + 1 < targetString.length) {
-      document.getElementById("targetTypedText").children[index + 1].classList = [];
-      document.getElementById("targetTypedText").children[index + 1].classList.add("active");
+      document.getElementById(targetTypedText).children[index + 1].classList = [];
+      document.getElementById(targetTypedText).children[index + 1].classList.add("active");
     }
   }
   else {
     incorrectclicks++;
-    document.getElementById("targetTypedText").children[index].classList = [];
-    document.getElementById("targetTypedText").children[index].classList.add("incorrect-color");
+    document.getElementById(targetTypedText).children[index].classList = [];
+    document.getElementById(targetTypedText).children[index].classList.add("incorrect-color");
     if (index + 1 < targetString.length) {
-      document.getElementById("targetTypedText").children[index + 1].classList = [];
-      document.getElementById("targetTypedText").children[index + 1].classList.add("active");
+      document.getElementById(targetTypedText).children[index + 1].classList = [];
+      document.getElementById(targetTypedText).children[index + 1].classList.add("active");
     }
   }
   records.push({ KeyCode: keycode, time: Date.now() });
@@ -61,12 +63,12 @@ function DeleteKeyTyped(e) {
     timer = 60;
   records.push({ KeyCode: keycode, time: Date.now() });
   if (index < targetString.length) {
-    document.getElementById("targetTypedText").children[index].classList = [];
-    document.getElementById("targetTypedText").children[index].classList.add("normal-color");
+    document.getElementById(targetTypedText).children[index].classList = [];
+    document.getElementById(targetTypedText).children[index].classList.add("normal-color");
   }
   index--;
-  document.getElementById("targetTypedText").children[index].classList = [];
-  document.getElementById("targetTypedText").children[index].classList.add("active");
+  document.getElementById(targetTypedText).children[index].classList = [];
+  document.getElementById(targetTypedText).children[index].classList.add("active");
 }
 
 function ViewRecord() {
@@ -90,20 +92,20 @@ function ViewRecordAction(moveindex) {
   var keycode = records[moveindex].KeyCode;
   if (keycode != 8) {
     if (keycode == targetString.charCodeAt(index) && incorrectclicks == 0) {
-      document.getElementById("targetTypedText").children[index].classList = [];
-      document.getElementById("targetTypedText").children[index].classList.add("correct-color");
+      document.getElementById(targetTypedText).children[index].classList = [];
+      document.getElementById(targetTypedText).children[index].classList.add("correct-color");
       if (index + 1 < targetString.length) {
-        document.getElementById("targetTypedText").children[index + 1].classList = [];
-        document.getElementById("targetTypedText").children[index + 1].classList.add("active");
+        document.getElementById(targetTypedText).children[index + 1].classList = [];
+        document.getElementById(targetTypedText).children[index + 1].classList.add("active");
       }
     }
     else {
       incorrectclicks++;
-      document.getElementById("targetTypedText").children[index].classList = [];
-      document.getElementById("targetTypedText").children[index].classList.add("incorrect-color");
+      document.getElementById(targetTypedText).children[index].classList = [];
+      document.getElementById(targetTypedText).children[index].classList.add("incorrect-color");
       if (index + 1 < targetString.length) {
-        document.getElementById("targetTypedText").children[index + 1].classList = [];
-        document.getElementById("targetTypedText").children[index + 1].classList.add("active");
+        document.getElementById(targetTypedText).children[index + 1].classList = [];
+        document.getElementById(targetTypedText).children[index + 1].classList.add("active");
       }
     }
     index++;
@@ -112,12 +114,12 @@ function ViewRecordAction(moveindex) {
     if (incorrectclicks > 0)
       incorrectclicks--;
     if (index < targetString.length) {
-      document.getElementById("targetTypedText").children[index].classList = [];
-      document.getElementById("targetTypedText").children[index].classList.add("normal-color");
+      document.getElementById(targetTypedText).children[index].classList = [];
+      document.getElementById(targetTypedText).children[index].classList.add("normal-color");
     }
     index--;
-    document.getElementById("targetTypedText").children[index].classList = [];
-    document.getElementById("targetTypedText").children[index].classList.add("active");
+    document.getElementById(targetTypedText).children[index].classList = [];
+    document.getElementById(targetTypedText).children[index].classList.add("active");
   }
   if (moveindex + 1 >= records.length) {
     playingrecord = false;
@@ -127,12 +129,12 @@ function ViewRecordAction(moveindex) {
 }
 
 function initialize() {
-  for (var i = 0; i < document.getElementById("targetTypedText").children.length; i++) {
-    document.getElementById("targetTypedText").children[i].classList = [];
+  for (var i = 0; i < document.getElementById(targetTypedText).children.length; i++) {
+    document.getElementById(targetTypedText).children[i].classList = [];
     if (i != 0)
-      document.getElementById("targetTypedText").children[i].classList.add("normal-color");
+      document.getElementById(targetTypedText).children[i].classList.add("normal-color");
     else
-      document.getElementById("targetTypedText").children[i].classList.add("active");
+      document.getElementById(targetTypedText).children[i].classList.add("active");
   }
 }
 
