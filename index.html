@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-  </head>
-  <body>
-    <input type="text" />
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <script src="main.js"></script>
+  <link rel="stylesheet" href="main.css">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+    <pre
+      id="targetTypedText"><span class="active">H</span><span class="normal-color">e</span><span class="normal-color">l</span><span class="normal-color">l</span><span class="normal-color">o</span><span class="normal-color"> </span>
+<span class="normal-color">W</span><span class="normal-color">o</span><span class="normal-color">r</span><span class="normal-color">l</span><span class="normal-color">d</span><span class="normal-color"> </span><span class="normal-color">!</span><span class="normal-color">!</span></pre>
+  </div>
+
+  <textarea onkeypress="addKeyTyped(event)"></textarea>
+</body>
+
 </html>

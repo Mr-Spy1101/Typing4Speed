@@ -1,0 +1,20 @@
+.normal-color {
+    color: black;
+}
+
+.correct-color {
+    color:green;
+}
+
+.incorrect-color {
+    color:red;
+}
+
+.active{
+    background-color:rgb(205, 205, 255);
+}
+
+span {
+    width: 10px;
+    
+}
