@@ -1,15 +1,17 @@
 var targetString = "Hello\rWorld !!";
-const targetTypedText = "targetTypedText";
+var targetTypedText =  document.getElementById("targetTypedText");
+
 var records = [];
 var incorrectclicks = 0;
 var index = 0;
 var gameOver = false;
 var timer = 60;
 var playingrecord = false;
+
 setInterval(() => {
   DecrementTimer();
   ViewTimer();
-}, 1000);
+}, 100);
 
 function addKeyTyped(e) {
   if (index >= targetString.length || gameOver)
@@ -22,20 +24,20 @@ function addKeyTyped(e) {
   var keycode = e.keycode || e.which;
   if (keycode == targetString.charCodeAt(index) && incorrectclicks == 0) {
 
-    document.getElementById(targetTypedText).children[index].classList = [];
-    document.getElementById(targetTypedText).children[index].classList.add("correct-color");
+    targetTypedText.children[index].classList = [];
+    targetTypedText.children[index].classList.add("correct-color");
     if (index + 1 < targetString.length) {
-      document.getElementById(targetTypedText).children[index + 1].classList = [];
-      document.getElementById(targetTypedText).children[index + 1].classList.add("active");
+      targetTypedText.children[index + 1].classList = [];
+      targetTypedText.children[index + 1].classList.add("active");
     }
   }
   else {
     incorrectclicks++;
-    document.getElementById(targetTypedText).children[index].classList = [];
-    document.getElementById(targetTypedText).children[index].classList.add("incorrect-color");
+    targetTypedText.children[index].classList = [];
+    targetTypedText.children[index].classList.add("incorrect-color");
     if (index + 1 < targetString.length) {
-      document.getElementById(targetTypedText).children[index + 1].classList = [];
-      document.getElementById(targetTypedText).children[index + 1].classList.add("active");
+      targetTypedText.children[index + 1].classList = [];
+      targetTypedText.children[index + 1].classList.add("active");
     }
   }
   records.push({ KeyCode: keycode, time: Date.now() });
@@ -44,7 +46,8 @@ function addKeyTyped(e) {
     gameOver = true;
     document.getElementById("viewRecordBtn").disabled = false;
     var cpm = targetString.length / (60 - timer) * 60;
-    document.getElementById("scoreText").innerHTML = "" + cpm.toFixed(1) + "  CPM" + "<br>" + (cpm / 4).toFixed(1) + "  WPM";
+    document.getElementById("WPM").innerHTML =  (cpm / 4).toFixed(1);
+    
   }
 }
 
@@ -63,12 +66,12 @@ function DeleteKeyTyped(e) {
     timer = 60;
   records.push({ KeyCode: keycode, time: Date.now() });
   if (index < targetString.length) {
-    document.getElementById(targetTypedText).children[index].classList = [];
-    document.getElementById(targetTypedText).children[index].classList.add("normal-color");
+    targetTypedText.children[index].classList = [];
+    targetTypedText.children[index].classList.add("normal-color");
   }
   index--;
-  document.getElementById(targetTypedText).children[index].classList = [];
-  document.getElementById(targetTypedText).children[index].classList.add("active");
+  targetTypedText.children[index].classList = [];
+  targetTypedText.children[index].classList.add("active");
 }
 
 function ViewRecord() {
@@ -92,20 +95,20 @@ function ViewRecordAction(moveindex) {
   var keycode = records[moveindex].KeyCode;
   if (keycode != 8) {
     if (keycode == targetString.charCodeAt(index) && incorrectclicks == 0) {
-      document.getElementById(targetTypedText).children[index].classList = [];
-      document.getElementById(targetTypedText).children[index].classList.add("correct-color");
+      targetTypedText.children[index].classList = [];
+      targetTypedText.children[index].classList.add("correct-color");
       if (index + 1 < targetString.length) {
-        document.getElementById(targetTypedText).children[index + 1].classList = [];
-        document.getElementById(targetTypedText).children[index + 1].classList.add("active");
+        targetTypedText.children[index + 1].classList = [];
+        targetTypedText.children[index + 1].classList.add("active");
       }
     }
     else {
       incorrectclicks++;
-      document.getElementById(targetTypedText).children[index].classList = [];
-      document.getElementById(targetTypedText).children[index].classList.add("incorrect-color");
+      targetTypedText.children[index].classList = [];
+      targetTypedText.children[index].classList.add("incorrect-color");
       if (index + 1 < targetString.length) {
-        document.getElementById(targetTypedText).children[index + 1].classList = [];
-        document.getElementById(targetTypedText).children[index + 1].classList.add("active");
+        targetTypedText.children[index + 1].classList = [];
+        targetTypedText.children[index + 1].classList.add("active");
       }
     }
     index++;
@@ -114,12 +117,12 @@ function ViewRecordAction(moveindex) {
     if (incorrectclicks > 0)
       incorrectclicks--;
     if (index < targetString.length) {
-      document.getElementById(targetTypedText).children[index].classList = [];
-      document.getElementById(targetTypedText).children[index].classList.add("normal-color");
+      targetTypedText.children[index].classList = [];
+      targetTypedText.children[index].classList.add("normal-color");
     }
     index--;
-    document.getElementById(targetTypedText).children[index].classList = [];
-    document.getElementById(targetTypedText).children[index].classList.add("active");
+    targetTypedText.children[index].classList = [];
+    targetTypedText.children[index].classList.add("active");
   }
   if (moveindex + 1 >= records.length) {
     playingrecord = false;
@@ -129,12 +132,12 @@ function ViewRecordAction(moveindex) {
 }
 
 function initialize() {
-  for (var i = 0; i < document.getElementById(targetTypedText).children.length; i++) {
-    document.getElementById(targetTypedText).children[i].classList = [];
+  for (var i = 0; i < targetTypedText.children.length; i++) {
+    targetTypedText.children[i].classList = [];
     if (i != 0)
-      document.getElementById(targetTypedText).children[i].classList.add("normal-color");
+      targetTypedText.children[i].classList.add("normal-color");
     else
-      document.getElementById(targetTypedText).children[i].classList.add("active");
+      targetTypedText.children[i].classList.add("active");
   }
 }
 
@@ -152,11 +155,12 @@ function PlayAgain() {
 function DecrementTimer() {
   if (gameOver)
     return;
-  timer--;
+  timer -= 0.1;
   if (index == 0)
     timer = 60;
 }
 
-function ViewTimer() {
-  document.getElementById("timerText").innerHTML = "Timer : " + timer;
+function ViewTimer() 
+{
+  document.getElementById("timerText").innerHTML =  timer.toFixed(1);
 }
