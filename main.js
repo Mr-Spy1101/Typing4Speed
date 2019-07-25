@@ -11,8 +11,7 @@ setInterval(() => {
   ViewTimer();
 }, 1000);
 
-function addKeyTyped(e) 
-{
+function addKeyTyped(e) {
   if (index >= targetString.length || gameOver)
     return;
   if (incorrectclicks >= 4)
@@ -22,7 +21,7 @@ function addKeyTyped(e)
 
   var keycode = e.keycode || e.which;
   if (keycode == targetString.charCodeAt(index) && incorrectclicks == 0) {
-    
+
     document.getElementById(targetTypedText).children[index].classList = [];
     document.getElementById(targetTypedText).children[index].classList.add("correct-color");
     if (index + 1 < targetString.length) {
