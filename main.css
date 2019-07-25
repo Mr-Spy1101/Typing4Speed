@@ -1,5 +1,26 @@
-.normal-color {
-    color: black;
+#Container
+{
+    margin: 0px;
+    width: auto;
+    height: 2900px;
+    background-color: #343434;
+}
+#Header 
+{
+    margin: 0px;
+    padding: 10px 30px 0px 30px;
+    width: auto;
+    height: 60px;
+    background-color: #2B2B2B;
+}
+
+#Title
+{
+    color: #01B584;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: normal;
+    float: left;
+    margin: 0px;
 }
 
 .correct-color {
