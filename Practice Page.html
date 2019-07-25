@@ -10,15 +10,80 @@
   <title>Coding Practice </title>
 </head>
 
-<body style="margin: 0px">
+<body>
 
   <div>
     <div id="Container">
         <div id = "Header">  
             <h1 id = "Title">Typing<span style = "color: white">4</span>Speed</h1>
+            <div id="User">
+                <h2>How Fast are your fingers?</h2>
+              </div>
+
+            <div class="table">
+                <ul id="Score">
+                  <li><h1>0</h1><P class="Green" >WPM</P></li>
+                  <li><h1>00:00</h1><P class="Green">Time</P></li>
+                  <li><h1>0</h1><P class="Green">Accuracy</P></li>
+                </ul>
+            </div>
+
+            
         </div>
+        <div id = "CodeBox">
+          <p id = "Code">
+                <pre>
+#include<iostream>
+  using namespace std;
+
+  #define m 998244353
+  #define add(x,y) (x + y) % m
+  #define multiple(x, y) (x*y) % m
+
+  unsigned long long shift(unsigned long long x) 
+  {
+    unsigned long long y = x%10;
+    x /= 10;
+    unsigned long long shift = 100;
+    while (x > 0)
+    {
+      y += (x % 10) * shift;
+      shift *= 100;
+      x /= 10;
+    }
+    return y % m;
+  }
+
+  int main()
+  {
+    int n; cin >> n;
+    unsigned long long temp;
+    unsigned long long cal;
+    unsigned long long shifted;
+    unsigned long long result = 0;
+
+    for (int i = 0; i < n; i++) 
+    {
+      cin >> temp;
+      shifted = shift(temp);
+      cal = add(multiple(shifted,n),multiple(shifted * 10,n));
+      result = add(result, cal);
+    }
+
+    cout << result % m << endl;
+    return 0;
+  }
+                    </pre>
+          </p>
+          
+
+        </div>
+        <div id = "InputBox" class="table">
+            <input id = "CodeInput" type="text" placeholder="Type The Code Here" class = "Center">
+        </div>
+       
     </div>
-  </div>
+  
 
 </body>
 
