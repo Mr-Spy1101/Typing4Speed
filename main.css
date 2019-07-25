@@ -1,3 +1,123 @@
+body
+{
+    min-width: 1000px;
+    margin: 0px;
+    background-color: #343434;
+}
+#Container
+{
+    margin: 0px;
+    width: auto;
+    height: 650px;
+    background-color: #343434;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+#Header 
+{
+    margin: 0px;
+    padding: 10px 30px 0px 30px;
+    width: auto;
+    height: 75px;
+    background-color: #2B2B2B;
+    color:whitesmoke;
+    
+}
+
+#Title
+{
+    color: #01B584; 
+    font-weight: normal;
+    float: left;
+    margin: 0px;
+}
+
+.table 
+{
+	display: table;   /* Allow the centering to work */
+	margin: 0 auto;
+}
+
+#Score
+{
+    margin: 0px;
+    display: flex;
+    list-style-type: none;
+}
+
+#Score li
+{
+    display: inline;
+    padding: 0px 10px;
+}
+#Score p{
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+#Score h1
+{
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+#User
+{
+    float: right;
+    padding-bottom: 10px;
+    
+}
+#CodeBox
+{
+    
+    padding: 10px 10px;
+    width: 600px;
+    height: 425px;
+    margin: 20px auto;
+    overflow: hidden;
+
+}
+#CodeBox::after
+ {
+    content:'';
+    width:100%;
+    height:5%;    
+    position:absolute;
+    left:0;
+    top:100px;
+    background:linear-gradient(#343434 10px,transparent );
+}
+
+#Code
+{
+    display: inline-block;
+    position: relative;
+    top: -510px;
+    color:white;
+}
+
+
+#InputBox
+{
+ 
+    width: 0px;
+    margin: 20px auto;
+
+}
+
+#CodeInput
+{
+    height: 2em;
+    width: 700px;
+    border-width: 0.3em;
+    border-color: #01B584;
+    background-color: #777777;
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 2em;
+}
+
 #targetTypedText {
     font-size: 16px;
 }
