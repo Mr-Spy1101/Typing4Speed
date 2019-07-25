@@ -124,11 +124,84 @@ body
 
 .normal-color {
     color: black;
+
 }
 
-.correct-color {
-    color:green;
+#Title
+{
+    color: #01B584; 
+    font-weight: normal;
+    float: left;
+    margin: 0px;
 }
+
+.table 
+{
+	display: table;   /* Allow the centering to work */
+	margin: 0 auto;
+}
+
+#Score
+{
+    margin: 0px;
+    display: flex;
+    list-style-type: none;
+}
+
+#Score li
+{
+    display: inline;
+    padding: 0px 10px;
+}
+#Score p{
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+#Score h1
+{
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+#User
+{
+    float: right;
+    padding-bottom: 10px;
+    
+}
+#CodeBox
+{
+    
+    padding: 10px 10px;
+    width: 600px;
+    height: 425px;
+    margin: 20px auto;
+    overflow: hidden;
+
+}
+#CodeBox::after
+ {
+    content:'';
+    width:100%;
+    height:5%;    
+    position:absolute;
+    left:0;
+    top:100px;
+    background:linear-gradient(#343434 10px,transparent );
+}
+
+#Code
+{
+    display: inline-block;
+    position: relative;
+    top: -510px;
+    color:white;
+}
+.correct-color
+ {
+    color:green;
+}   
 
 .incorrect-color {
     color:red;
@@ -153,3 +226,4 @@ body
 .incorrect-color .space {
     background-color: rgba(255, 29, 29, 0.8);
 }
+
