@@ -7,6 +7,8 @@ var gameOver = false;
 function addKeyTyped(e) {
   if (index >= targetString.length || gameOver)
     return;
+  if (incorrectclicks >= 4)
+    return;
   var keycode = e.keycode || e.which;
   console.log(keycode, "   ", targetString.charCodeAt(index));
   if (keycode == targetString.charCodeAt(index) && incorrectclicks == 0) {
