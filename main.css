@@ -1,20 +1,43 @@
+#targetTypedText {
+    font-size: 0px;
+}
+
+span {
+    word-spacing: 5px;
+}
+
 .normal-color {
     color: black;
+    font-size: 18px;
 }
 
 .correct-color {
     color:green;
+    font-size: 18px;
 }
 
 .incorrect-color {
     color:red;
+    font-size: 18px;
 }
 
 .active{
     background-color:rgb(205, 205, 255);
+    font-size: 18px;
 }
 
-span {
-    width: 10px;
-    
+.enter{
+    opacity: 0.2;
+}
+
+.active .enter {
+    opacity: 0.8;
+}
+
+.incorrect-color .enter {
+    opacity: 1;
+}
+
+.incorrect-color .space {
+    background-color: rgba(255, 29, 29, 0.6);
 }

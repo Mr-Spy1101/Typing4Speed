@@ -1,4 +1,4 @@
-var targetString = "Hello\rWorld !!\rHello\rWorld !!\rHello\rWorld !!\rHello\rWorld !!\rHello\rWorld !!";
+var targetString = "Hello\rWorld !!";
 var records = [];
 var incorrectclicks = 0;
 var index = 0;
