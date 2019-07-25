@@ -7,39 +7,25 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <script src="main.js"></script>
   <link rel="stylesheet" href="main.css">
-  <title>Document</title>
+  <title>Typing4Speed</title>
 </head>
 
 <body>
-  <div style="font-size: 18px;">
-    <div id="targetTypedText">
-      <span class="active">H</span>
-      <span class="normal-color">e</span>
-      <span class="normal-color">l</span>
-      <span class="normal-color">l</span>
-      <span class="normal-color">o</span>
-      <span class="normal-color"><span class="enter">&#9661;</span><br /></span>
-      <span class="normal-color">W</span>
-      <span class="normal-color">o</span>
-      <span class="normal-color">r</span>
-      <span class="normal-color">l</span>
-      <span class="normal-color">d</span>
-      <span class="normal-color"><span class="space">&nbsp;</span></span>
-      <span class="normal-color">!</span>
-      <span class="normal-color">!</span>
-    </div>
+  <pre id="targetTypedText">
+<span class="active">H</span><span class="normal-color">e</span><span class="normal-color">l</span><span class="normal-color">l</span><span class="normal-color">o</span><span class="normal-color"><span class="enter">&#9661;</span></span>
+<span class="normal-color">W</span><span class="normal-color">o</span><span class="normal-color">r</span><span class="normal-color">l</span><span class="normal-color">d</span><span class="normal-color"><span class="space">&nbsp;</span></span><span class="normal-color">!</span><span class="normal-color">!</span></pre>
 
-    <textarea onkeypress="addKeyTyped(event)" onkeydown="DeleteKeyTyped(event)" value=""></textarea>
-    <br>
-    <button id="viewRecordBtn" disabled=true onclick="ViewRecord()">View Recording</button>
-    <br>
-    <button onclick="PlayAgain()">Play Again</button>
+  <textarea onkeypress="addKeyTyped(event)" onkeydown="DeleteKeyTyped(event)" value=""></textarea>
+  <br>
+  <button id="viewRecordBtn" disabled=true onclick="ViewRecord()">View Recording</button>
+  <br>
+  <button onclick="PlayAgain()">Play Again</button>
 
-    <p id="scoreText">
+  <p id="scoreText">
 
-    </p>
+  </p>
 
-    <p id="timerText">Timer : 60</p>
+  <p id="timerText">Timer : 60</p>
 </body>
 
 </html>
