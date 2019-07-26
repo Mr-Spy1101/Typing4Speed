@@ -27,11 +27,11 @@
               <P class="Green">WPM</P>
             </li>
             <li>
-              <h1 id="timerText">00:00</h1>
+              <h1 id="timerText">00:0</h1>
               <P class="Green">Time</P>
             </li>
             <li>
-              <h1 id="Accuracy">0</h1>
+              <h1 id="Accuracy">100%</h1>
               <P class="Green">Accuracy</P>
             </li>
           </ul>

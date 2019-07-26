@@ -1,16 +1,16 @@
 var targetString = "Hello\rWorld !!";
-var targetTypedText =  document.getElementById("targetTypedText");
+var targetTypedText = document.getElementById("targetTypedText");
 
 var records = [];
 var incorrectclicks = 0;
 var index = 0;
 var gameOver = false;
-var timer = 60;
+var timer = 0;
 var playingrecord = false;
 
 setInterval(() => {
   DecrementTimer();
-  ViewTimer();
+  ViewTimerAndWPM();
 }, 100);
 
 function addKeyTyped(e) {
@@ -19,7 +19,7 @@ function addKeyTyped(e) {
   if (incorrectclicks >= 4)
     return;
   if (index == 0)
-    timer = 60;
+    timer = 0;
 
   var keycode = e.keycode || e.which;
   if (keycode == targetString.charCodeAt(index) && incorrectclicks == 0) {
@@ -45,9 +45,8 @@ function addKeyTyped(e) {
   if (index == targetString.length && incorrectclicks == 0) {
     gameOver = true;
     document.getElementById("viewRecordBtn").disabled = false;
-    var cpm = targetString.length / (60 - timer) * 60;
-    document.getElementById("WPM").innerHTML =  (cpm / 4).toFixed(1);
-    
+    var cpm = index / timer * 60;
+    document.getElementById("WPM").innerHTML = (cpm / 4).toFixed(0);
   }
 }
 
@@ -63,7 +62,7 @@ function DeleteKeyTyped(e) {
   if (incorrectclicks > 0)
     incorrectclicks--;
   if (index == 1)
-    timer = 60;
+    timer = 0;
   records.push({ KeyCode: keycode, time: Date.now() });
   if (index < targetString.length) {
     targetTypedText.children[index].classList = [];
@@ -82,6 +81,7 @@ function ViewRecord() {
   index = 0;
   incorrectclicks = 0;
   initialize();
+  timer = 0;
   ViewRecordAction(0);
   playingrecord = true;
 }
@@ -91,7 +91,6 @@ function ViewRecordAction(moveindex) {
     return;
   if (!gameOver)
     return;
-
   var keycode = records[moveindex].KeyCode;
   if (keycode != 8) {
     if (keycode == targetString.charCodeAt(index) && incorrectclicks == 0) {
@@ -149,18 +148,23 @@ function PlayAgain() {
   playingrecord = false;
   document.getElementById("viewRecordBtn").disabled = true;
   initialize();
-  timer = 60;
+  timer = 0;
 }
 
 function DecrementTimer() {
-  if (gameOver)
+  if (gameOver && !playingrecord)
     return;
-  timer -= 0.1;
+  timer += 0.1;
   if (index == 0)
-    timer = 60;
+    timer = 0;
 }
 
-function ViewTimer() 
-{
-  document.getElementById("timerText").innerHTML =  timer.toFixed(1);
+function ViewTimerAndWPM() {
+  document.getElementById("timerText").innerHTML = timer.toFixed(1);
+  if (timer - parseInt(timer) <= 0.1) {
+    if (timer > 0)
+      document.getElementById("WPM").innerHTML = (index / timer * 60 / 4).toFixed(0);
+    if (index > 0)
+      document.getElementById("Accuracy").innerHTML = (index / records.length * 100).toFixed(0) + "%";
+  }
 }
