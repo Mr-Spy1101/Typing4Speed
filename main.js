@@ -1,17 +1,50 @@
-var targetString = "Hello\rWorld !!";
-var targetTypedText = document.getElementById("targetTypedText");
+var targetString;
+var textId;
+var targetTypedText;
+var records;
+var incorrectclicks;
+var index;
+var gameOver;
+var timer;
+var playingrecord;
 
-var records = [];
-var incorrectclicks = 0;
-var index = 0;
-var gameOver = false;
-var timer = 0;
-var playingrecord = false;
+FirstFunctionToCall();
 
-setInterval(() => {
-  DecrementTimer();
-  ViewTimerAndWPM();
-}, 100);
+function FirstFunctionToCall() {
+  textId = 45;
+
+  var request = new XMLHttpRequest();
+  request.open('GET', 'api.php?mode=session&sessionkey=textid', true);
+  request.send();
+  request.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      textId = this.responseText;
+
+      var xrequest = new XMLHttpRequest();
+      xrequest.open('GET', 'api.php?mode=plain&id=' + textId, true);
+      xrequest.send();
+      xrequest.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          targetString = this.responseText;
+        }
+      };
+    }
+  };
+
+
+  targetTypedText = document.getElementById("targetTypedText");
+  records = [];
+  incorrectclicks = 0;
+  index = 0;
+  gameOver = false;
+  timer = 0;
+  playingrecord = false;
+
+  setInterval(() => {
+    DecrementTimer();
+    ViewTimerAndWPM();
+  }, 100);
+}
 
 function addKeyTyped(e) {
   if (index >= targetString.length || gameOver)
@@ -167,4 +200,22 @@ function ViewTimerAndWPM() {
     if (index > 0)
       document.getElementById("Accuracy").innerHTML = (index / records.length * 100).toFixed(0) + "%";
   }
+}
+
+function Countlines(str) {
+  var lines = str.split("\r");
+  return lines.length;
+}
+
+function findGetParameter(parameterName) {
+  var result = null,
+    tmp = [];
+  location.search
+    .substr(1)
+    .split("&")
+    .forEach(function (item) {
+      tmp = item.split("=");
+      if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+    });
+  return result;
 }

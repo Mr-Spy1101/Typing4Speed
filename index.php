@@ -11,7 +11,6 @@
 </head>
 
 <body>
-
   <div>
     <div id="Container">
       <div id="Header">
@@ -27,7 +26,7 @@
               <P class="Green">WPM</P>
             </li>
             <li>
-              <h1 id="timerText">00:0</h1>
+              <h1 id="timerText">0.0</h1>
               <P class="Green">Time</P>
             </li>
             <li>
@@ -39,16 +38,39 @@
 
 
       </div>
-      <div id="CodeBox">
-        <pre id="targetTypedText">
-          <span class="active">H</span><span class="normal-color">e</span><span class="normal-color">l</span><span class="normal-color">l</span><span class="normal-color">o</span><span class="normal-color"><span class="enter">&#9661;</span></span>
-          <span class="normal-color">W</span><span class="normal-color">o</span><span class="normal-color">r</span><span class="normal-color">l</span><span class="normal-color">d</span><span class="normal-color"><span class="space">&nbsp;</span></span><span class="normal-color">!</span><span class="normal-color">!</span>
-        </pre>
+      <div id="CodeBox" onclick="document.getElementById('CodeInput').focus();">
+      <?php
+        require 'functions.php';
+        $textid = "";
+        if(isset($_GET["id"]))
+          $textid = $_GET["id"];
+        else
+        {
+          require 'dbconnection.php';
+          $res = "";
+          if(isset($_GET["type"]))
+          {
+            $type = $_GET["type"];
+            $res = $conn->query("SELECT id FROM texts where type='$type' ORDER BY RAND()");
+          }
+          else
+            $res = $conn->query("SELECT id FROM texts ORDER BY RAND()");
+          foreach ($res as $row)
+          {
+            $textid = $row["id"];
+            break;
+          } 
+        }
+        session_start();
+        $_SESSION["textid"] = $textid;
+        echo TargetTextFileToHTML($_SESSION["textid"]);
 
+        //TargetTextFileToDB("code.txt", "code");
+      ?>
       </div>
       <div id="InputBox" class="table">
         <textarea onkeypress="addKeyTyped(event)" onkeydown="DeleteKeyTyped(event)" value=""
-          placeholder="Type The Code Here" class="Center" id="CodeInput"></textarea>
+          placeholder="Type The Code Here" class="Center" id="CodeInput" autofocus></textarea>
       </div>
 
       <br>

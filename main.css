@@ -2,14 +2,14 @@ body
 {
     min-width: 1000px;
     margin: 0px;
-    background-color: #343434;
+    background-color: #111111;
 }
 #Container
 {
     margin: 0px;
     width: auto;
     height: 650px;
-    background-color: #343434;
+    background-color: #111111;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 #Header 
@@ -64,48 +64,44 @@ body
 {
     float: right;
     padding-bottom: 10px;
-    
 }
 #CodeBox
 {
-    
     padding: 10px 10px;
     width: 600px;
     height: 425px;
-    margin: 20px auto;
+    margin: 10px auto;
     overflow: hidden;
-
 }
 #CodeBox::after
  {
     content:'';
     width:100%;
-    height:5%;    
+    height:5%;
     position:absolute;
     left:0;
-    top:100px;
+    top: 100px;
     background:linear-gradient(#343434 10px,transparent );
 }
 
-#Code
+#targetTypedText
 {
     display: inline-block;
     position: relative;
-    top: -510px;
+    top: 0px;
     color:white;
 }
 
 
 #InputBox
 {
- 
     width: 0px;
-    margin: 20px auto;
-
+    margin: 0px auto;
 }
 
 #CodeInput
 {
+    align-content: center;
     height: 2em;
     width: 700px;
     border-width: 0.3em;
@@ -116,6 +112,7 @@ body
     font-weight: bold;
     text-align: center;
     border-radius: 2em;
+    resize: none;
 }
 
 #targetTypedText {
@@ -123,8 +120,7 @@ body
 }
 
 .normal-color {
-    color: black;
-
+    color: white;
 }
 
 #Title
@@ -188,31 +184,31 @@ body
     position:absolute;
     left:0;
     top:100px;
-    background:linear-gradient(#343434 10px,transparent );
+    background:linear-gradient(#111111 10px,transparent );
 }
 
 #Code
 {
     display: inline-block;
     position: relative;
-    top: -510px;
+    top: 0px;
     color:white;
 }
 .correct-color
- {
-    color:green;
+{
+    color:rgb(0, 165, 0);
 }   
 
 .incorrect-color {
-    color:red;
+    color:rgb(255, 24, 24);
 }
 
 .active{
-    background-color:rgb(205, 205, 255);
+    background-color:rgba(119, 119, 194, 0.5);
 }
 
 .enter{
-    opacity: 0.2;
+    opacity: 0.25;
 }
 
 .active .enter {
@@ -226,4 +222,3 @@ body
 .incorrect-color .space {
     background-color: rgba(255, 29, 29, 0.8);
 }
-
