@@ -100,7 +100,7 @@ function TargetTextFileToString($textId)
     while (strpos($data, "\r", $index) !== false)
     {
         $line = substr($data, $index, strpos($data, "\r", $index) - $index);
-        $index = strpos($data, "\r", $index) + 1;
+        $index = strpos($data, "\r", $index) + 2;
         $isNotSpace = false;
         $len = strlen($line);
         for($i=0;$i<$len;$i++)
@@ -121,5 +121,87 @@ function TargetTextFileToString($textId)
     }
 
     return $output;
+}
+
+function MatchExists($matchId)
+{
+    require 'dbconnection.php';
+    $sql = "SELECT id FROM matches WHERE id='$matchId';";
+    $res = $conn->query($sql);
+    $id = '-1';
+    foreach ($res as $row)
+    {
+        $id = $row["id"];
+    }
+
+    if($id == '-1')
+        return false;
+    else
+        return true;
+}
+
+function GetMatchTextId($matchId)
+{
+    require 'dbconnection.php';
+    $sql = "SELECT textid FROM matches WHERE id='$matchId';";
+    $res = $conn->query($sql);
+    $textId = '-1';
+    foreach ($res as $row)
+    {
+        $textId = $row["textid"];
+    }
+    return $textId;
+}
+
+function PlayerExistInMatch($matchId, $playerId)
+{
+    require 'dbconnection.php';
+    $sql = "SELECT playerid FROM matchesplayers WHERE matchid='$matchId' AND playerid='$playerId';";
+    $res = $conn->query($sql);
+    $isExist = false;
+    foreach ($res as $row)
+    {
+        $isExist = true;
+    }
+
+    return $isExist;
+}
+
+function AddPlayerToMatch($matchId, $playerId)
+{
+    require 'dbconnection.php';
+    $time = time();
+    $sql = "INSERT INTO matchesplayers (matchid, playerid, wpm, lifetime) VALUES ('$matchId', '$playerId', 0, $time);";
+    $conn->query($sql);
+}
+
+function GetMaxTime($matchId)
+{
+    require 'dbconnection.php';
+    $sql = "SELECT maxtime FROM matches WHERE id='$matchId';";
+    $res = $conn->query($sql);
+    $maxTime = 0;
+    foreach ($res as $row)
+    {
+        $maxTime = $row["maxtime"];
+    }
+    return $maxTime;
+}
+
+function AddNewMatch($matchId, $textType, $maxTime)
+{
+    require 'dbconnection.php';
+    $time = time();
+    $endtime = $time + $maxTime;
+    $textId = -1;
+    $res = $conn->query("SELECT id FROM texts WHERE type='$textType' ORDER BY RAND()");
+    foreach ($res as $row)
+    {
+        $textId = $row["id"];
+        break;
+    }
+    $sql = "INSERT INTO matches (id, starttime, maxtime, texttype, textid) VALUES ('$matchId', '$time',
+                                                                                   '$endtime', '$textType', '$textId');";
+    $conn->query($sql);
 }
 ?>

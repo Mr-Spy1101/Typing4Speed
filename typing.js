@@ -84,8 +84,9 @@ function addKeyTyped(e) {
 }
 
 function DeleteKeyTyped(e) {
-  e.target.value = "";//always clear textarea
   var keycode = e.keycode || e.which;
+  if (keycode == 13 || keycode == 32)
+    e.target.value = "";
   if (index == 0)
     return;
   if (gameOver)
