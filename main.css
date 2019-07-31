@@ -2,17 +2,31 @@ body
 {
     min-width: 1000px;
     margin: 0px;
-    background-color: #111111;
 }
+
+h3,h2 {
+    color: #01B584;
+    font-weight: bold;
+}
+
 #Container
 {
     margin: 0px;
     width: auto;
-    height: 650px;
-    background-color: #111111;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
 #Header 
+{
+    margin: 0px;
+    padding: 10px 30px 0px 30px;
+    width: auto;
+    height: 60px;
+    background-color: #2B2B2B;
+    color:whitesmoke;
+    
+}
+#Header-wide
 {
     margin: 0px;
     padding: 10px 30px 0px 30px;
@@ -22,13 +36,11 @@ body
     color:whitesmoke;
     
 }
-
 #Title
 {
     color: #01B584; 
     font-weight: normal;
     float: left;
-    margin: 0px;
 }
 
 .table 
@@ -60,63 +72,50 @@ body
     margin-top: 0px;
     margin-bottom: 0px;
 }
-#User
+#Greating
 {
+    
     float: right;
-    padding-bottom: 10px;
+    margin-right: 20px;
+    margin-top: 7px;
+    
+    
 }
 #CodeBox
 {
+    
     padding: 10px 10px;
     width: 600px;
     height: 425px;
-    margin: 10px auto;
+    margin: 20px auto;
     overflow: hidden;
-}
-#CodeBox::after
- {
-    content:'';
-    width:100%;
-    height:5%;
-    position:absolute;
-    left:0;
-    top: 100px;
-    background:linear-gradient(#343434 10px,transparent );
+
 }
 
-#targetTypedText
+#Code
 {
     display: inline-block;
     position: relative;
-    top: 0px;
+    top: -510px;
     color:white;
 }
 
 
 #InputBox
 {
+ 
     width: 0px;
-    margin: 0px auto;
+    margin: 20px auto;
+
 }
 
-#CodeInput
-{
-    align-content: center;
-    height: 2em;
-    width: 700px;
-    border-width: 0.3em;
-    border-color: #01B584;
-    background-color: #777777;
-    color: white;
-    font-size: 1em;
-    font-weight: bold;
-    text-align: center;
-    border-radius: 2em;
-    resize: none;
-}
 
 #targetTypedText {
     font-size: 16px;
+    display: inline-block;
+    position: relative;
+    top: 0px;
+    color:white;
 }
 
 .normal-color {
@@ -131,22 +130,27 @@ body
     margin: 0px;
 }
 
-.table 
+.mytable 
 {
 	display: table;   /* Allow the centering to work */
-	margin: 0 auto;
+    margin: 0 auto;
+    padding: 0 auto;
 }
 
 #Score
 {
     margin: 0px;
-    display: flex;
+    display: inline-block;
     list-style-type: none;
+}
+
+#matchState{
+    display: none;
 }
 
 #Score li
 {
-    display: inline;
+    display: inline-block;
     padding: 0px 10px;
 }
 #Score p{
@@ -163,7 +167,7 @@ body
 #User
 {
     float: right;
-    padding-bottom: 10px;
+    padding-bottom: 0px;
     
 }
 #CodeBox
@@ -176,7 +180,7 @@ body
     overflow: hidden;
 
 }
-#CodeBox::after
+#gradient::after
  {
     content:'';
     width:100%;
@@ -184,31 +188,32 @@ body
     position:absolute;
     left:0;
     top:100px;
-    background:linear-gradient(#111111 10px,transparent );
+    background:linear-gradient(#343434 10px,transparent );
+    z-index: -1;
 }
 
 #Code
 {
     display: inline-block;
     position: relative;
-    top: 0px;
+    top: -510px;
     color:white;
 }
 .correct-color
-{
-    color:rgb(0, 165, 0);
+ {
+    color:green;
 }   
 
 .incorrect-color {
-    color:rgb(255, 24, 24);
+    color:red;
 }
 
 .active{
-    background-color:rgba(119, 119, 194, 0.5);
+    background-color:rgb(205, 205, 255);
 }
 
 .enter{
-    opacity: 0.25;
+    opacity: 0.2;
 }
 
 .active .enter {
@@ -222,3 +227,138 @@ body
 .incorrect-color .space {
     background-color: rgba(255, 29, 29, 0.8);
 }
+
+footer 
+{
+    height: 75px;
+    background-color: #2B2B2B;
+    font-size: large;
+    padding-bottom: 20px;
+}
+
+.side-box
+{
+    width : 240px;
+    height: 430px;
+    margin : 30px;
+    outline: 2px solid rgba(1, 181, 132,0.5);
+    background: rgba(0, 0, 0, 0.17);
+    
+}
+
+.left{
+    float : left;
+
+}
+
+.right{
+    float: right;
+}
+
+.aligned-list
+{
+    margin: 0px;
+    display: flex;
+    list-style-type: none;
+   
+}
+
+.side-top-right
+{
+    padding-top :0px;
+}
+
+#scorebox
+{
+    margin : 0 auto;
+    width: 220px;
+    height: 315px;
+    overflow: hidden;
+}
+#scorebox h4{
+    display: inline;
+}
+
+#chatbox
+{
+    margin : 0 0;
+    padding: 0 0;
+    width: 220px;
+    height: 335px;
+    overflow: hidden;
+}
+#chat{
+    list-style-type: none;
+    
+    padding: 0 0;
+    padding-left: 15px;
+}
+#chat h5,p
+{
+   
+    display: inline;
+}
+#chat h5{
+    font-size: 15px;
+}
+#chat p {
+    font-size: medium;
+}
+
+#CodeInput
+{
+    height: 2em;
+    width: 700px;
+    border-width: 0.3em;
+    border-color: #01B584;
+    background-color: #777777;
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 2em;
+    display: none;
+}
+
+#join 
+{
+    background-color: #01B584;
+    border: 0px;
+    border-radius: 24px;
+    height: 2em;
+    width: 400px;
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 2em;
+    position: relative;
+    
+}
+
+.joinFade {
+  -webkit-animation-name: cssAnimation;
+  -webkit-animation-duration:1s;
+  -webkit-animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes cssAnimation {
+  0% {
+    background-color: #01B584;
+    color: white;
+    width: 400px;   
+    display: inline;
+  }
+  50%{
+    background-color: rgba(1, 181, 132,0.2);
+    color: rgba(255, 255, 255,0.2);
+    width: 700px;
+  }
+  100% {
+    background-color : transparent;
+    color: transparent;
+    width: 700px;
+    display: none;
+    z-index: -2;
+  }
+}   

@@ -91,6 +91,55 @@ function go()
             $conn->query($sql);
         }
     }
+    else if($_GET["mode"]=="data" && isset($_GET["matchid"]) && isset($_GET["score"]))
+    {
+        require 'dbconnection.php';
+        $matchId = $_GET["matchid"];
+        $res = $conn->query("SELECT playerid, wpm FROM matchesplayers WHERE matchid='$matchId' ORDER BY wpm DESC");
+        
+        $output = "";
+        foreach ($res as $row)
+        {
+            $playerId = $row["playerid"];
+            $wpm = $row["wpm"];
+            $output .= "<li>&nbsp; &nbsp;<h4>$playerId</h4> &nbsp; &nbsp; &nbsp;<h4>$wpm</h4></li>";
+        }
+        echo $output;
+    }
+
+    else if($_GET["mode"]=="data" && isset($_GET["matchid"]) && isset($_GET["ismatchexist"]))
+    {
+        require 'dbconnection.php';
+        $matchId = $_GET["matchid"];
+        $res = $conn->query("SELECT id FROM matches WHERE id='$matchId';");
+        
+        $output = "no";
+        foreach ($res as $row)
+        {
+            $output = "yes";
+        }
+        echo $output;
+    }
+
+    else if($_GET["mode"]=="data" && isset($_GET["matchid"]) && isset($_GET["playerid"]) && isset($_GET["isplayerexistsinmatch"]))
+    {
+        require 'dbconnection.php';
+        $matchId = $_GET["matchid"];
+        $playerId = $_GET["playerid"];
+        if(PlayerExistInMatch($matchId, $playerId))
+            echo "yes";
+        else
+            echo "no";
+    }
+
+    else if($_GET["mode"]=="creatematch" && isset($_GET["matchid"]) && isset($_GET["playerid"]))
+    {
+        require 'dbconnection.php';
+        $matchId = $_GET["matchid"];
+        $playerId = $_GET["playerid"];
+        AddNewMatch($matchId, "code", 100);
+        AddPlayerToMatch($matchId, $playerId);
+    }
 }
 go();
 ?>

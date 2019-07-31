@@ -1,0 +1,14 @@
+body
+{
+    min-width: 1000px;
+    margin: 0px;
+    background-color: #343434;
+}
+#Container
+{
+    margin: 0px;
+    width: auto;
+    height: 650px;
+    background-color: #343434;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

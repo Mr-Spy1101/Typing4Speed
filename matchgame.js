@@ -75,7 +75,19 @@ function FirstFunctionToCall() {
 
     setInterval(() => {
         RefreshData();
-    }, 2000);
+    }, 1000);
+
+    setInterval(() => {
+        var xxrequest = new XMLHttpRequest();
+        xxrequest.open('GET', 'api.php?mode=data&score=1&matchid=' + matchId, true);
+        xxrequest.send();
+        xxrequest.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("scoreboxcontainer").innerHTML = this.responseText;
+                //$("scoreboxcontainer").html(this.responseText);
+            }
+        };
+    }, 1000);
 }
 
 function addKeyTyped(e) {
@@ -175,8 +187,11 @@ function CheckMaxTime() {
 
 function RefreshData() {
     //refresh lifetime, wpm
+    var wpm = 0;
+    if (timer > 0)
+        wpm = (index / timer * 60 / 4);
     var request = new XMLHttpRequest();
-    request.open('GET', 'api.php?mode=refresh&matchid=' + matchId + '&playerid=' + playerId + '&wpm=' + (index / timer * 60 / 4).toFixed(0) + '&lifetime=1', true);
+    request.open('GET', 'api.php?mode=refresh&matchid=' + matchId + '&playerid=' + playerId + '&wpm=' + wpm.toFixed(0) + '&lifetime=1', true);
     request.send();
 
     //refresh and delete empty matches and dead players //maybe search for an automated way that the server itself make
@@ -184,3 +199,55 @@ function RefreshData() {
     request.open('GET', 'api.php?mode=refresh&all=1', true);
     request.send();
 }
+
+/*
+var joined = 0;
+var MatchStarted = false;
+
+function NeedPlayers() {
+    $("#matchState").html("<h2>Waiting for Players...</h2>");
+}
+
+function StartMatchCountDown() {
+    let x = 10;
+    $("#matchState").html("<h2>The match will start in " + x + " </h2>");
+
+    setInterval(() => {
+        x--;
+        if (x == -1)
+            StartMatch();
+        else
+            $("#matchState").html("<h2>The match will start in " + x + " </h2>");
+
+    }, 1000);
+}
+
+function StartMatch() {
+    MatchStarted = true;
+}
+*/
+
+$(() => {
+    $("#join").click(function () {
+        $("#join").addClass('joinFade');
+        setTimeout(() => {
+            $("#join").css("display", "none");
+            $("#CodeInput").css("display", "inherit");
+        }, 200);
+
+        setTimeout(() => {
+            $('#CodeInput').focus();
+        }, 300);
+
+
+        /*
+        if (joined >= 2) {
+            StartMatchCountDown();
+        }
+        else {
+            NeedPlayers();
+        }
+        */
+    }
+    )
+})

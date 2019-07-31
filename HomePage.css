@@ -1,0 +1,82 @@
+body {
+    background-color: #343434;
+}
+#mainrow
+{
+    position: absolute;
+    top: 7em;
+    color : white;
+}
+
+#mainText h2
+{
+    
+    font-size: 2.5em;
+    color:white;
+    color: whitesmoke;
+}
+
+#mainText p code
+{
+    display: block;
+    text-align: left;
+    clear: both;
+    width: 25m;
+    background: transparent;
+    padding-top: 25px;
+    font-size: 1.8em;
+    font-family: Segoe UI;
+    padding-left: 35px;
+    color: white;
+}
+
+#EnterButton
+{
+    background: #01B584;
+    transform: scale(1.5);
+    font-weight: bold;
+    border-radius: 5px 5px 5px 0px;
+    border-width: 0;
+}
+
+#features
+{
+    margin: 40px;
+    margin-top : 60px;
+    margin-left : 120px;
+    color: white;
+  
+}
+#features ul
+{
+    list-style: none;
+}
+#features img{
+    margin-bottom: 0px;
+
+}
+#features li{
+    margin: 0px;
+    display: flex;
+    list-style-type: none;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.img-title img
+{
+    width: 200px;
+    height: 200px;
+}
+
+.img-title h1,h2,h3,p{
+    display: inline;
+}
+
+.text-box
+{
+    margin: 20px;
+}
+
+#matchidinputtext, #matchcreatebtn, #playeridinputtext, #joinmatchidinputtext, #joinplayeridinputtext, #matchjoinbtn {
+    color: black;
+}
