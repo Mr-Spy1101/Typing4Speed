@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="Gameplay.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+  <script>
+    var targetString;
+    var targetTypedText;
+    var incorrectclicks;
+    var records;
+    var index;
+    var gameOver;
+    var PlayerConnected = false;
+
+    function FirstFunctionToCall() {
+      targetTypedText = document.getElementById("targetTypedText");
+      incorrectclicks = 0;
+      records = [];
+      index = 0;
+      gameOver = false;
+    }
+
+    function addKeyTyped(e) {
+      if (MatchStatus == 'waiting' || MatchStatus == 'gameover')
+        return;
+      if (index >= targetString.length || gameOver)
+        return;
+      if (incorrectclicks >= 4)
+        return;
+      if (index == 0)
+        timer = 0;
+
+      var keycode = e.keycode || e.which;
+      if (keycode == targetString.charCodeAt(index) && incorrectclicks == 0) {
+
+        targetTypedText.children[index].classList = [];
+        targetTypedText.children[index].classList.add("correct-color");
+        if (index + 1 < targetString.length) {
+          targetTypedText.children[index + 1].classList = [];
+          targetTypedText.children[index + 1].classList.add("active");
+        }
+      }
+      else {
+        incorrectclicks++;
+        targetTypedText.children[index].classList = [];
+        targetTypedText.children[index].classList.add("incorrect-color");
+        if (index + 1 < targetString.length) {
+          targetTypedText.children[index + 1].classList = [];
+          targetTypedText.children[index + 1].classList.add("active");
+        }
+      }
+      records.push({ KeyCode: keycode, time: Date.now() });
+      index++;
+      if (index == targetString.length && incorrectclicks == 0) {
+        gameOver = true;
+        document.getElementById("viewRecordBtn").disabled = false;
+        var cpm = index / timer * 60;
+        document.getElementById("WPM").innerHTML = (cpm / 4).toFixed(0);
+      }
+    }
+
+    function DeleteKeyTyped(e) {
+      if (MatchStatus == 'waiting' || MatchStatus == 'gameover')
+        return;
+      e.target.value = "";//always clear textarea
+      var keycode = e.keycode || e.which;
+      if (index == 0)
+        return;
+      if (gameOver)
+        return;
+      if (keycode != 8)
+        return;
+      if (incorrectclicks > 0)
+        incorrectclicks--;
+      if (index == 1)
+        timer = 0;
+      records.push({ KeyCode: keycode, time: Date.now() });
+      if (index < targetString.length) {
+        targetTypedText.children[index].classList = [];
+        targetTypedText.children[index].classList.add("normal-color");
+      }
+      index--;
+      targetTypedText.children[index].classList = [];
+      targetTypedText.children[index].classList.add("active");
+    }
+  </script>
+  <title>Match Game</title>
+
+  <script>
+    var socket = io();
+
+    var url = new URL(window.location.href);
+    matchId = url.searchParams.get("matchid");
+    var playerName = url.searchParams.get("playername");
+    if (matchId == "")// or match does not exist
+      exit("match does not exist");
+    if (playerName == "")
+      playerName = "Guest";
+    playerId = "";//random generator
+
+    socket.emit('JoinPlayerToMatch', {
+      matchid: matchId,
+      playername: playerName
+    });
+
+    socket.on('ResponseJoinPlayerToMatch', function () {
+      PlayerConnected = true;
+    });
+
+    //sleep(1000);
+
+    socket.emit('RequestTextHTML', {
+      matchid: matchId
+    });
+    socket.on('ResponseTextHTML', function (data) {
+      document.getElementById("CodeBox").innerHTML = data.html;
+    });
+
+    socket.emit('RequestTextString', {
+      matchid: matchId
+    });
+    socket.on('ResponseTextString', function (data) {
+      targetString = data.text;
+    });
+
+    setInterval(() => {
+      if (PlayerConnected == false)
+        return;
+      socket.emit('SendPlayerData', {
+        matchid: matchId,
+        characterreaches: index,
+        recordscount: records.length
+      });
+
+      socket.emit('RequestMatchData', {
+        matchid: matchId,
+      });
+    }, 1000 / 25);
+
+    socket.on('ResponseMatchData', function (data) {
+      //if(some condition)
+      document.getElementById("WPM").innerHTML = data.matchdata[playerId].wpm;
+      document.getElementById("Accuracy").innerHTML = data.matchdata[playerId].accuracy;
+      document.getElementById("timerText").innerHTML = data.matchdata.timer;
+      if (data.matchdata.status == "gameover")
+        document.getElementById("timerText").style.color = "#f00";
+
+      //////////
+      var output = "";
+      for (var i in data.matchdata.players)
+        output += "<li>&nbsp; &nbsp;<h4>" + data.matchdata.players[i].name + "</h4> &nbsp; &nbsp; &nbsp;<h4>" + data.matchdata.players[i].wpm + "</h4></li>";
+      document.getElementById("scoreboxcontainer").innerHTML = output;
+      //////////
+      //maybe chatting thing
+    });
+
+    socket.on('RefreshPage', function (data) {
+      //refresh page
+    });
+
+    socket.on('GameStarts', function () {
+      JoinRace();
+    });
+
+
+    function JoinRace() {
+      socket.emit('GetPlayerReady', { matchid: matchId });
+      $("#join").addClass('joinFade');
+      setTimeout(() => {
+        $("#join").css("display", "none");
+        $("#CodeInput").css("display", "inherit");
+      }, 200);
+
+      setTimeout(() => {
+        $('#CodeInput').focus();
+      }, 350);
+    }
+  </script>
+</head>
+
+<body>
+  <div>
+    <div id="Container">
+      <div id="Header-wide">
+        <h1 id="Title">Typing<span style="color: white">4</span>Speed</h1>
+
+        <h2 id="User">How Fast are your fingers?</h2>
+
+        <!-- show this when 2 or more joins the match-->
+        <div id="matchState" class="mytable">
+          <h2>Join to start</h2>
+        </div>
+
+        <!-- show this when the match is played-->
+        <div class="mytable">
+          <ul id="Score">
+            <li>
+              <h1 id="WPM">0</h1>
+              <P class="Green">WPM</P>
+            </li>
+            <li>
+              <h1 id="timerText">0.0</h1>
+              <P class="Green">Time</P>
+            </li>
+            <li>
+              <h1 id="Accuracy">0</h1>
+              <P class="Green">Accuracy</P>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="gradient">
+      </div>
+
+      <!-- side lists -->
+      <div class="side-box left ">
+        <div class="side-top">
+          <h2 class="mytable" style="margin-top: 5px">Chat</h2>
+        </div>
+        <div id="chatbox">
+          <ul id="chat">
+          </ul>
+        </div>
+        <br>
+        <input class="mytable" type="text">
+      </div>
+
+      <div class="side-box right ">
+        <div class="side-top-right">
+          </tr>
+          <ul class="aligned-list mytable" style="padding-left: 22px; ">
+            <li>
+              <h3>Rank</h3>
+            </li>
+            <li>
+              <h3> &nbsp; &nbsp; &nbsp;</h3>
+            </li>
+            <li>
+              <h3>Name</h3>
+            </li>
+            <li>
+              <h3> &nbsp; &nbsp; &nbsp;</h3>
+            </li>
+            <li>
+              <h3>WPM</h3>
+            </li>
+          </ul>
+          <div id="scorebox">
+            <ol id="scoreboxcontainer">
+            </ol>
+          </div>
+          <br>
+          <button class="mytable">Close</button>
+        </div>
+      </div>
+
+      <div id="CodeBox" onclick="$('#CodeInput').focus();">
+
+      </div>
+      <div id="InputBox" class="mytable">
+        <textarea onkeypress="addKeyTyped(event)" onkeydown="DeleteKeyTyped(event)" value=""
+          placeholder="Type The Code Here" class="Center" id="CodeInput"></textarea>
+        <button id="join" class="mytable" onclick="JoinRace();">Join The Race</button>
+      </div>
+
+      <br>
+      <button id="viewRecordBtn" disabled=true onclick="ViewRecord()">View Recording</button>
+
+      <br>
+
+    </div>
+</body>
+
+<script>FirstFunctionToCall();</script>
+
+</html>
