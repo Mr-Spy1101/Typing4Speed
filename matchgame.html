@@ -5,189 +5,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-
   <link rel="stylesheet" href="main.css">
   <link rel="stylesheet" href="Gameplay.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" type="text/javascript"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
   <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-  <script>
-    var targetString;
-    var targetTypedText;
-    var incorrectclicks;
-    var records;
-    var index;
-    var gameOver;
-    var PlayerConnected = false;
-
-    function FirstFunctionToCall() {
-      targetTypedText = document.getElementById("targetTypedText");
-      incorrectclicks = 0;
-      records = [];
-      index = 0;
-      gameOver = false;
-    }
-
-    function addKeyTyped(e) {
-      if (MatchStatus == 'waiting' || MatchStatus == 'gameover')
-        return;
-      if (index >= targetString.length || gameOver)
-        return;
-      if (incorrectclicks >= 4)
-        return;
-      if (index == 0)
-        timer = 0;
-
-      var keycode = e.keycode || e.which;
-      if (keycode == targetString.charCodeAt(index) && incorrectclicks == 0) {
-
-        targetTypedText.children[index].classList = [];
-        targetTypedText.children[index].classList.add("correct-color");
-        if (index + 1 < targetString.length) {
-          targetTypedText.children[index + 1].classList = [];
-          targetTypedText.children[index + 1].classList.add("active");
-        }
-      }
-      else {
-        incorrectclicks++;
-        targetTypedText.children[index].classList = [];
-        targetTypedText.children[index].classList.add("incorrect-color");
-        if (index + 1 < targetString.length) {
-          targetTypedText.children[index + 1].classList = [];
-          targetTypedText.children[index + 1].classList.add("active");
-        }
-      }
-      records.push({ KeyCode: keycode, time: Date.now() });
-      index++;
-      if (index == targetString.length && incorrectclicks == 0) {
-        gameOver = true;
-        document.getElementById("viewRecordBtn").disabled = false;
-        var cpm = index / timer * 60;
-        document.getElementById("WPM").innerHTML = (cpm / 4).toFixed(0);
-      }
-    }
-
-    function DeleteKeyTyped(e) {
-      if (MatchStatus == 'waiting' || MatchStatus == 'gameover')
-        return;
-      e.target.value = "";//always clear textarea
-      var keycode = e.keycode || e.which;
-      if (index == 0)
-        return;
-      if (gameOver)
-        return;
-      if (keycode != 8)
-        return;
-      if (incorrectclicks > 0)
-        incorrectclicks--;
-      if (index == 1)
-        timer = 0;
-      records.push({ KeyCode: keycode, time: Date.now() });
-      if (index < targetString.length) {
-        targetTypedText.children[index].classList = [];
-        targetTypedText.children[index].classList.add("normal-color");
-      }
-      index--;
-      targetTypedText.children[index].classList = [];
-      targetTypedText.children[index].classList.add("active");
-    }
-  </script>
   <title>Match Game</title>
-
-  <script>
-    var socket = io();
-
-    var url = new URL(window.location.href);
-    matchId = url.searchParams.get("matchid");
-    var playerName = url.searchParams.get("playername");
-    if (matchId == "")// or match does not exist
-      exit("match does not exist");
-    if (playerName == "")
-      playerName = "Guest";
-    playerId = "";//random generator
-
-    socket.emit('JoinPlayerToMatch', {
-      matchid: matchId,
-      playername: playerName
-    });
-
-    socket.on('ResponseJoinPlayerToMatch', function () {
-      PlayerConnected = true;
-    });
-
-    //sleep(1000);
-
-    socket.emit('RequestTextHTML', {
-      matchid: matchId
-    });
-    socket.on('ResponseTextHTML', function (data) {
-      document.getElementById("CodeBox").innerHTML = data.html;
-    });
-
-    socket.emit('RequestTextString', {
-      matchid: matchId
-    });
-    socket.on('ResponseTextString', function (data) {
-      targetString = data.text;
-    });
-
-    setInterval(() => {
-      if (PlayerConnected == false)
-        return;
-      socket.emit('SendPlayerData', {
-        matchid: matchId,
-        characterreaches: index,
-        recordscount: records.length
-      });
-
-      socket.emit('RequestMatchData', {
-        matchid: matchId,
-      });
-    }, 1000 / 25);
-
-    socket.on('ResponseMatchData', function (data) {
-      //if(some condition)
-      document.getElementById("WPM").innerHTML = data.matchdata[playerId].wpm;
-      document.getElementById("Accuracy").innerHTML = data.matchdata[playerId].accuracy;
-      document.getElementById("timerText").innerHTML = data.matchdata.timer;
-      if (data.matchdata.status == "gameover")
-        document.getElementById("timerText").style.color = "#f00";
-
-      //////////
-      var output = "";
-      for (var i in data.matchdata.players)
-        output += "<li>&nbsp; &nbsp;<h4>" + data.matchdata.players[i].name + "</h4> &nbsp; &nbsp; &nbsp;<h4>" + data.matchdata.players[i].wpm + "</h4></li>";
-      document.getElementById("scoreboxcontainer").innerHTML = output;
-      //////////
-      //maybe chatting thing
-    });
-
-    socket.on('RefreshPage', function (data) {
-      //refresh page
-    });
-
-    socket.on('GameStarts', function () {
-      JoinRace();
-    });
-
-
-    function JoinRace() {
-      socket.emit('GetPlayerReady', { matchid: matchId });
-      $("#join").addClass('joinFade');
-      setTimeout(() => {
-        $("#join").css("display", "none");
-        $("#CodeInput").css("display", "inherit");
-      }, 200);
-
-      setTimeout(() => {
-        $('#CodeInput').focus();
-      }, 350);
-    }
-  </script>
 </head>
 
 <body>
   <div>
     <div id="Container">
+      <div id="div1" hidden=true>
+      </div>
+
       <div id="Header-wide">
         <h1 id="Title">Typing<span style="color: white">4</span>Speed</h1>
 
@@ -230,7 +61,7 @@
           </ul>
         </div>
         <br>
-        <input class="mytable" type="text">
+        <input id="chatinputbox" type="text">
       </div>
 
       <div class="side-box right ">
@@ -273,12 +104,248 @@
 
       <br>
       <button id="viewRecordBtn" disabled=true onclick="ViewRecord()">View Recording</button>
-
       <br>
 
     </div>
-</body>
+  </div>
 
-<script>FirstFunctionToCall();</script>
+  <script>
+    var playerId;
+    var targetString;
+    var targetTypedText;
+    var incorrectclicks;
+    var records;
+    var index;
+    var gameOver;
+    var PlayerConnected = false;
+    var playerName = "Guest";
+    var MatchStatus = "waiting";
+    var TopPlayer;
+
+    function FirstFunctionToCall() {
+      incorrectclicks = 0;
+      records = [];
+      index = 0;
+      gameOver = false;
+      document.getElementById("chatinputbox")
+        .addEventListener("keyup", function (e) {
+          if (!PlayerConnected)
+            return;
+          var keycode = e.KeyCode || e.which;
+          message = document.getElementById("chatinputbox").value;
+          if (keycode == 13 && message != "") {
+            if (message.length < 50) {
+              socket.emit("ResuestAddChatToMatch", {
+                matchid: matchId,
+                playername: playerName,
+                message: document.getElementById("chatinputbox").value
+              });
+            }
+            document.getElementById("chatinputbox").value = "";
+          }
+        });
+    }
+
+    function addKeyTyped(e) {
+      if (MatchStatus == 'waiting' || MatchStatus == 'gameover')
+        return;
+      if (index >= targetString.length || gameOver)
+        return;
+      if (incorrectclicks >= 4)
+        return;
+      if (index == 0)
+        timer = 0;
+
+      var keycode = e.keycode || e.which;
+      if (keycode == targetString.charCodeAt(index) && incorrectclicks == 0) {
+
+        targetTypedText.children[index].classList = [];
+        targetTypedText.children[index].classList.add("correct-color");
+        if (index + 1 < targetString.length) {
+          targetTypedText.children[index + 1].classList = [];
+          targetTypedText.children[index + 1].classList.add("active");
+        }
+      }
+      else {
+        incorrectclicks++;
+        targetTypedText.children[index].classList = [];
+        targetTypedText.children[index].classList.add("incorrect-color");
+        if (index + 1 < targetString.length) {
+          targetTypedText.children[index + 1].classList = [];
+          targetTypedText.children[index + 1].classList.add("active");
+        }
+      }
+      records.push({ KeyCode: keycode, time: Date.now() });
+      index++;
+      if (index == targetString.length && incorrectclicks == 0) {
+        gameOver = true;
+        document.getElementById("viewRecordBtn").disabled = false;
+      }
+    }
+
+    function DeleteKeyTyped(e) {
+      if (MatchStatus == 'waiting' || MatchStatus == 'gameover')
+        return;
+      e.target.value = "";//always clear textarea
+      var keycode = e.keycode || e.which;
+      if (index == 0)
+        return;
+      if (gameOver)
+        return;
+      if (keycode != 8)
+        return;
+      if (incorrectclicks > 0)
+        incorrectclicks--;
+      if (index == 1)
+        timer = 0;
+      records.push({ KeyCode: keycode, time: Date.now() });
+      if (index < targetString.length) {
+        targetTypedText.children[index].classList = [];
+        targetTypedText.children[index].classList.add("normal-color");
+      }
+      index--;
+      targetTypedText.children[index].classList = [];
+      targetTypedText.children[index].classList.add("active");
+    }
+
+    function ShowDiv() {
+      $("#div1").html("The Winner is <strong>" + TopPlayer.name + "</strong> With <strong>" + TopPlayer.wpm.toFixed(0) + "</strong> WPM");
+      $("#div1").show();
+    }
+    FirstFunctionToCall();
+
+
+    /////////////////////
+
+
+    var socket = io();
+
+    var url = new URL(window.location.href);
+    matchId = url.searchParams.get("matchid");
+    playerName = url.searchParams.get("playername");
+    if (matchId == null || matchId == "") {
+      alert("match does not exist");
+      window.stop();
+    }
+    if (playerName == null || playerName == "")
+      playerName = "Guest";
+
+    socket.on('ResponsePlayerId', function (data) {
+      playerId = data.playerid;
+    })
+
+    socket.emit('RequestJoinPlayerToMatch', {
+      matchid: matchId,
+      playername: playerName
+    });
+    socket.on('ResponseJoinPlayerToMatch', function (data) {
+      if (data.joinstatus == false) {
+        alert("match does not exist");
+        window.stop();
+      }
+
+      PlayerConnected = true;
+      MatchStatus = data.matchstatus;
+      if (MatchStatus == "running")
+        JoinRace();
+      socket.emit('RequestTextHTML', {
+        matchid: matchId
+      });
+
+      socket.emit('RequestTextString', {
+        matchid: matchId
+      });
+    });
+
+    socket.on('ResponseTextHTML', function (data) {
+      document.getElementById("CodeBox").innerHTML = data.html;
+      targetTypedText = document.getElementById("targetTypedText");
+    });
+
+    socket.on('ResponseTextString', function (data) {
+      targetString = data.text;
+    });
+
+    setInterval(() => {
+      if (PlayerConnected == false)
+        return;
+      socket.emit('SendPlayerData', {
+        matchid: matchId,
+        characterreaches: index,
+        recordscount: records.length
+      });
+
+      socket.emit('RequestMatchData', {
+        matchid: matchId,
+      });
+    }, 100);
+
+    socket.on('ResponseMatchData', function (data) {
+      MatchStatus = data.matchdata.status;
+      if (MatchStatus == "gameover" && $("#div1").is(":hidden")) {
+        ShowDiv();
+      }
+      document.getElementById("WPM").innerHTML = (data.matchdata.players[playerId].wpm).toFixed(0);
+      document.getElementById("Accuracy").innerHTML = data.matchdata.players[playerId].accuracy.toFixed(0);
+      document.getElementById("timerText").innerHTML = data.matchdata.timer.toFixed(1);
+      if (data.matchdata.status == "gameover")
+        document.getElementById("timerText").style.color = "#f00";
+
+      //////////
+      var players = [];
+      for (var i in data.matchdata.players)
+        players.push({ wpm: data.matchdata.players[i].wpm, name: data.matchdata.players[i].playerName });
+      players.sort(function (a, b) {
+        return b.wpm - a.wpm;
+      });
+      TopPlayer = { name: players[0].name, wpm: players[0].wpm };
+      var output = "";
+      for (var i in players) {
+        if (i != 0)
+          output += "<li style='color: white;'>&nbsp; &nbsp;<h4>" + players[i].name + "</h4> &nbsp; &nbsp; &nbsp;<h4>" + players[i].wpm.toFixed(0) + "</h4></li>";
+        else
+          output += "<li style='color: green;'>&nbsp; &nbsp;<h4>" + players[i].name + "</h4> &nbsp; &nbsp; &nbsp;<h4>" + players[i].wpm.toFixed(0) + "</h4></li>";
+      }
+      document.getElementById("scoreboxcontainer").innerHTML = output;
+      //////////
+      output = "";
+      var chats = data.matchdata.chats;
+      chats.sort(function (a, b) {
+        return a.date - b.date;
+      });
+      for (var i = Math.max(0, chats.length - 12); i < chats.length; i++) {
+        if (i != chats.length - 1)
+          output += "<li style='color: #888;' class='messageli'><strong>" + chats[i].playername + ":</strong> " + chats[i].message + "</li>";
+        else
+          output += "<li style='color: #fff;' class='messageli'><strong>" + chats[i].playername + ":</strong> " + chats[i].message + "</li>";
+      }
+      document.getElementById("chat").innerHTML = output;
+    });
+
+    socket.on('RefreshPage', function (data) {
+      window.location.href = window.location.href;
+    });
+
+    socket.on('GameStarts', function () {
+      JoinRace();
+    });
+
+
+    function JoinRace() {
+      if (PlayerConnected)
+        socket.emit('SetPlayerReady', { matchid: matchId });
+      $("#join").addClass('joinFade');
+      setTimeout(() => {
+        $("#join").css("display", "none");
+        $("#CodeInput").css("display", "inherit");
+      }, 200);
+
+      setTimeout(() => {
+        $('#CodeInput').focus();
+      }, 350);
+    }
+
+  </script>
+</body>
 
 </html>
