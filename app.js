@@ -94,10 +94,10 @@ setInterval(() => {
 
 var mysql = require('mysql');
 var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    database: "typing4speed",
-    password: ""
+    host: "sql261.main-hosting.eu",
+    user: "u270049495_admin",
+    database: "u270049495_keter",
+    password: "typing4speed123"
 });
 
 con.connect(function (err) {
