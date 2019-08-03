@@ -94,8 +94,8 @@
       <div id="CodeBox" onclick="$('#CodeInput').focus();">
 
       </div>
-      <div id="InputBox" class="mytable">
-        <textarea onkeypress="addKeyTyped(event)" onkeydown="DeleteKeyTyped(event)" value=""
+      <div id="InputBox" class="mytable"> 
+        <textarea onkeypress="addKeyTyped(event)" onkeydown="DeleteKeyTyped(event)" value="" style="display: none"
           placeholder="Type The Code Here" class="Center" id="CodeInput"></textarea>
         <button id="join" class="mytable" onclick="JoinRace();">Join The Race</button>
       </div>
@@ -287,7 +287,7 @@
           $("#ScoreTable").css("display","table");
           $("#matchState").css("display","none");
       }
-      else if(MatchStatus == "waiting")
+      else if(MatchStatus == "waiting" || MatchStatus == "counting")
       {
           $("#ScoreTable").css("display","none"); 
           $("#matchState").css("display","table");
