@@ -6,56 +6,123 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
+  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+ 
+
+  <link rel="stylesheet" href="HomePage.css">
   <link rel="stylesheet" href="main.css">
-  <title>Coding Practice</title>
+  
+  <title>Coding Practice </title>
 </head>
 
 <body>
 
-  <div>
-    <div id="Container">
-      <div id="Header">
-        <h1 id="Title">Typing<span style="color: white">4</span>Speed</h1>
-        <div id="User">
-          <h2>How Fast are your fingers?</h2>
-        </div>
-
-        <div class="table">
-          <ul id="Score">
-            <li>
-              <h1 id="WPM">0</h1>
-              <P class="Green">WPM</P>
-            </li>
-            <li>
-              <h1 id="timerText">00:00</h1>
-              <P class="Green">Time</P>
-            </li>
-            <li>
-              <h1 id="Accuracy">0</h1>
-              <P class="Green">Accuracy</P>
-            </li>
-          </ul>
-        </div>
-
-
+  <div class="row">
+    <div id="Container" class="row">
+     
+        <div id="StaticHeader" class="row">
+          <a href="index.html"><h1 id="Title" class="col-md-3">Typing<span style="color: white">4</span>Speed</h1></a> 
+            <div class="col-md-5"></div>
+            
+              <h2 id="Greating" class="col-md-4">How Fast are your fingers?</h2>
+              <img src = "Rewind.png" width = 50px class="right" ></button>
+          </div>
+          
+    <img src="1.png" height="120%" width="100%" style="margin-top: 70px">
+      
+    <div id = "mainrow" class = "row">
+      <div class = "col-md-6 "></div>
+      <div id = "mainText" class = "col-md-6">
+        <br>
+        <h2>Typing Practice for Programmers</h2>
+        <p>
+          <code>      
+            Practice typing the awkward characters in code.
+              No drills — type through open source code in 
+              JavaScript, Ruby, C, C++, Java, PHP, Perl, Haskell, Scala, 
+              and more.
+              Eliminate the mistyped keys delaying every edit-
+              compile-test iteration.
+            </code>
+          </p>
+          <br>
+          <br>
+        
+          <br>
+          <br>
+          <div class="col-md-2"></div>
+          <a href="gamepage.html"><button id = "EnterButton" class="col-lg-2 offset-lg-10" style="color: white"> Get Started </button></a>
       </div>
-      <div id="CodeBox">
-        <pre id="targetTypedText">
-          <span class="active">H</span><span class="normal-color">e</span><span class="normal-color">l</span><span class="normal-color">l</span><span class="normal-color">o</span><span class="normal-color"><span class="enter">&#9661;</span></span>
-          <span class="normal-color">W</span><span class="normal-color">o</span><span class="normal-color">r</span><span class="normal-color">l</span><span class="normal-color">d</span><span class="normal-color"><span class="space">&nbsp;</span></span><span class="normal-color">!</span><span class="normal-color">!</span>
-        </pre>
-
-      </div>
-      <div id="InputBox" class="table">
-        <textarea onkeypress="addKeyTyped(event)" onkeydown="DeleteKeyTyped(event)" value=""
-          placeholder="Type The Code Here" class="Center" id="CodeInput"></textarea>
-      </div>
-
-      <br>
-      <button id="viewRecordBtn" disabled=true onclick="ViewRecord()">View Recording</button>
-      <br>
-
+      
+  
     </div>
+   
+   
+
+    <div id = "features" class="row ">
+      <ul >
+          <!--<li class="row mytable">
+              <box class="col-xs-offset-1 col-md-2">
+                
+              </box>
+              <box class="col-xs-offset-2 col-md-2">
+                <h2 style="color: white">
+                    OnlinePlayers
+                </h2>
+                <h1>
+                  55
+                </h1>
+              </box>
+              <box class="col-xs-offset-2 col-md-2">
+              
+              </box>
+           </li>-->
+           
+        <li class = "img-title row">
+          <img class = "col-sm-4" src="codeSpeed.png">
+          <div class = "col-sm-1 " > </div>
+            <div class = "col-sm-6 text-box">
+              <h2>Improve your coding speed</h2> <br>
+              <p>large code collections for variey of languages</p>
+            </div>
+          </li>
+        <li class = "img-title row">  <div class = "col-sm-3 " > 
+          
+        </div><div class = "col-sm-6 text-box"><h2>Challenge other</h2>
+           <br> 
+            <p>have fun challenging other coders </p></div>
+             <img class = "col-sm-4" src="race.png"> </p>
+          </li>
+        <li class = "img-title row">
+          <img class = "col-sm-4" src="friends.png"> 
+           <div class = "col-sm-1 " > </div>
+           <div class = "col-sm-6 text-box">
+             <h2>have fun with friend and familty</h2> <br> 
+             <p>you can create a room and invite whoever you want</p>
+          </div>
+        </li>
+
+      
+      </ul>
+    </div>
+
+  
+    <footer class = "row">
+        <div class="mytable">
+            <ul class="aligned-list">
+              <li>
+                <a>About Us</a>
+              <li>
+                <a>Terms <code style="background: transparent">&</code> Privacy</a>
+              </li>
+              <li>
+                <a>Contact</a>
+              </li>
+            </ul>
+          </div>
+         
+    </footer>
+
 </body>
 
 <script src="main.js"></script>

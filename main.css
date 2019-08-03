@@ -1,34 +1,57 @@
+html {
+  scroll-behavior: smooth;
+}
+
 body
 {
-    min-width: 1000px;
     margin: 0px;
-    background-color: #343434;
+    background-image: url("GamePage.png");
+    background-attachment: fixed;
+	background-size: 100% 100%; 
+	min-height: 670px;
 }
+
+h3,h2 {
+    color: #01B584;
+    font-weight: bold;
+}
+
 #Container
 {
     margin: 0px;
     width: auto;
-    height: 650px;
-    background-color: #343434;
+    height: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+
+
 #Header 
 {
     margin: 0px;
-    padding: 10px 30px 0px 30px;
+    padding: 10px 30px 10px 30px;
     width: auto;
-    height: 75px;
-    background-color: #2B2B2B;
+    background-color: rgba(0, 0, 0, 0.801);
     color:whitesmoke;
+    z-index: 10000;
     
 }
 
+#StaticHeader
+{
+    position: fixed;
+    margin: 0px;
+    padding: 10px 30px 10px 30px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.951);
+    color:whitesmoke;
+    z-index: 10000;
+}
 #Title
 {
     color: #01B584; 
     font-weight: normal;
     float: left;
-    margin: 0px;
 }
 
 .table 
@@ -60,10 +83,12 @@ body
     margin-top: 0px;
     margin-bottom: 0px;
 }
-#User
+#Greating
 {
+    
     float: right;
-    padding-bottom: 10px;
+    margin-right: 20px;
+    margin-top: 7px;
     
 }
 #CodeBox
@@ -74,17 +99,8 @@ body
     height: 425px;
     margin: 20px auto;
     overflow: hidden;
+    color : white;
 
-}
-#CodeBox::after
- {
-    content:'';
-    width:100%;
-    height:5%;    
-    position:absolute;
-    left:0;
-    top:100px;
-    background:linear-gradient(#343434 10px,transparent );
 }
 
 #Code
@@ -104,26 +120,13 @@ body
 
 }
 
-#CodeInput
-{
-    height: 2em;
-    width: 700px;
-    border-width: 0.3em;
-    border-color: #01B584;
-    background-color: #777777;
-    color: white;
-    font-size: 1em;
-    font-weight: bold;
-    text-align: center;
-    border-radius: 2em;
-}
 
 #targetTypedText {
     font-size: 16px;
 }
 
 .normal-color {
-    color: black;
+    color: white;
 
 }
 
@@ -135,39 +138,17 @@ body
     margin: 0px;
 }
 
-.table 
+.mytable 
 {
 	display: table;   /* Allow the centering to work */
-	margin: 0 auto;
+    margin: 0 auto;
+    padding: 0 auto;
 }
 
-#Score
-{
-    margin: 0px;
-    display: flex;
-    list-style-type: none;
-}
-
-#Score li
-{
-    display: inline;
-    padding: 0px 10px;
-}
-#Score p{
-    text-align: center;
-    margin-top: 0px;
-    margin-bottom: 0px;
-}
-#Score h1
-{
-    text-align: center;
-    margin-top: 0px;
-    margin-bottom: 0px;
-}
 #User
 {
     float: right;
-    padding-bottom: 10px;
+    padding-bottom: 0px;
     
 }
 #CodeBox
@@ -180,7 +161,7 @@ body
     overflow: hidden;
 
 }
-#CodeBox::after
+#gradient::after
  {
     content:'';
     width:100%;
@@ -189,6 +170,7 @@ body
     left:0;
     top:100px;
     background:linear-gradient(#343434 10px,transparent );
+    z-index: -1;
 }
 
 #Code
@@ -200,7 +182,7 @@ body
 }
 .correct-color
  {
-    color:green;
+    color: #01B584;
 }   
 
 .incorrect-color {
@@ -208,7 +190,7 @@ body
 }
 
 .active{
-    background-color:rgb(205, 205, 255);
+    background-color:rgba(205, 205, 255, 0.425);
 }
 
 .enter{
@@ -227,3 +209,187 @@ body
     background-color: rgba(255, 29, 29, 0.8);
 }
 
+footer 
+{
+   
+
+    margin-top: 50px;
+    width: auto;
+    background-color: rgba(0, 0, 0, 0.801);
+    font-size: large;
+    padding-bottom: 10px;
+}
+
+.side-box
+{
+    width : 240px;
+    height: 430px;
+    margin : 30px;
+    outline: 2px solid rgba(1, 181, 132,0.5);
+    background: rgba(0, 0, 0, 0.17);
+    
+}
+
+.left{
+    float : left;
+
+}
+
+.right{
+    float: right;
+}
+
+.aligned-list
+{
+    margin: 0px;
+    display: flex;
+    list-style-type: none;
+   
+}
+.aligned-list li{
+    margin: 5px 20px;
+}
+
+.aligned-list-no-margin
+{
+    margin: 0px;
+    display: flex;
+    list-style-type: none;
+   
+}
+.side-top-right
+{
+    padding-top :0px;
+}
+
+#scorebox
+{
+    margin : 0 auto;
+    width: 220px;
+    height: 315px;
+    overflow: hidden;
+}
+#scorebox h4{
+    display: inline;
+}
+
+#chatbox
+{
+    margin : 0 0;
+    padding: 0 0;
+    width: 220px;
+    height: 335px;
+    overflow: hidden;
+}
+#chat{
+    list-style-type: none;
+    
+    padding: 0 0;
+    padding-left: 15px;
+}
+#chat h5,p
+{
+   
+    display: inline;
+}
+#chat h5{
+    font-size: 15px;
+}
+#chat p {
+    font-size: medium;
+}
+
+#CodeInput
+{
+    height: 2em;
+    width: 700px;
+    border-width: 0.3em;
+    border-color: #01B584;
+    background-color: #777777;
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 2em;
+    display: none;
+}
+
+#join 
+{
+    background-color: #01B584;
+    border: 0px;
+    border-radius: 24px;
+    height: 2em;
+    width: 400px;
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 2em;
+    position: relative;
+    
+}
+
+.joinFade {
+  -webkit-animation-name: cssAnimation;
+  -webkit-animation-duration:1s;
+  -webkit-animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes cssAnimation {
+  0% {
+    background-color: #01B584;
+    color: white;
+    width: 400px;   
+    display: inline;
+  }
+  50%{
+    background-color: rgba(1, 181, 132,0.2);
+    color: rgba(255, 255, 255,0.2);
+    width: 700px;
+  }
+  100% {
+    background-color : transparent;
+    color: transparent;
+    width: 700px;
+    display: none;
+    z-index: -2;
+  }
+}   
+
+label
+{
+    color: #01B584;
+    font-size: medium;
+    text-align: center;
+}
+
+.center
+{
+    display: block;
+    text-align: center;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* bootstrape modification */
+
+.form-control:focus
+{
+    border-color:#01B584;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px  rgba(1, 181, 133, 0.6);
+}
+
+.btn
+{
+    background-color: #01B584;
+    color: white;
+    font-size: medium;
+}
+
+.btn:hover
+{
+    background-color: rgb(1, 158, 116);
+    color: white;
+    font-size: medium;
+}
