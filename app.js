@@ -1,3 +1,11 @@
+// Data 
+let WAITING = "waiting";
+let COUNTING = "counting";
+let RUNNING = "running";
+let GAMEOVER = "gameover";
+let MatchTimeOut = 100000;
+
+// server information
 var express = require('express');
 var app = express();
 var serv = require('http').Server(app);
@@ -9,7 +17,143 @@ app.use('/client', express.static(__dirname + '/client'));
 app.use(express.static(__dirname));
 serv.listen(8080);//listen to port 8080
 
+var io = require('socket.io')(serv, {});
+
 //////////////////////////////////////////////
+
+// connecting to the database
+
+var mysql = require('mysql');
+var con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    database: "typing4speed",
+    password: ""
+});
+
+con.connect(function (err) {
+    if (err)
+        console.log("DB   " + err);
+    else
+        console.log("DB connected");
+});
+
+/////////////////////////////////
+
+// adding to database
+
+var fs = require('fs');
+function TargetTextFileToDB(filename, type) {
+    fs.readFile(filename, 'utf8', function (err, data) {
+        var output = "";
+        var lines = data.split('\n');
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            line = line.replace(/[\t]/, "    ");
+            for (var j = 0; j < line.length; j++)
+                output += line[j];
+        }
+        output = Buffer.from(data, 'ascii').toString('base64');
+        var sql = "INSERT INTO texts (text, type) VALUES ('" + output + "', '" + type + "');";
+        con.query(sql);
+    });
+}
+//TargetTextFileToDB("code.txt", "code");
+
+/////////////////////////////////
+
+// Importing Files from Database
+function StringToHTML(textid, callback)
+ {
+    var sql = "SELECT text FROM texts WHERE id=" + textid + ";";
+    output = "";
+    con.query(sql, function (err, result) {
+        var data = result[0]["text"];
+        data = Buffer.from(data, 'base64').toString('ascii');
+
+        output = "<pre id='targetTypedText'>";
+        var index = 0;
+        var firstchar = true;
+        while (data.indexOf("\r", index) >= 0) {
+            var line = data.substr(index, data.indexOf("\r", index) - index);
+            index = data.indexOf("\r", index) + 2;
+            isNotSpace = false;
+            len = line.length;
+            for (var i = 0; i < len; i++) {
+                if (isNotSpace == false) {
+                    if (line[i] != ' ')//if not space
+                    {
+                        isNotSpace = true;
+                        if (firstchar) {
+                            output += "<span class='normal-color active'>" + line[i] + "</span>";
+                            firstchar = false;
+                        }
+                        else
+                            output += "<span class='normal-color'>" + line[i] + "</span>";
+                    }
+                    else
+                        output += " ";
+                }
+                else {
+                    if (line[i] == ' ')
+                        output += "<span class='normal-color'>" + "<span class='space'>" + line[i] + "</span></span>";
+                    else
+                        output += "<span class='normal-color'>" + line[i] + "</span>";
+                }
+            }
+            if (len > 1)
+                output += "<span class='normal-color enter'><span class='enter'>&#9661;</span></span>";
+            output += "\r";
+        }
+        output += '</pre>';
+        return callback(output);
+    });
+}
+
+function StringToString(textid, callback)
+{
+    var sql = "SELECT text FROM texts WHERE id=" + textid + ";";
+    con.query(sql, function (err, result) {
+        var data = result[0]["text"];
+        data = Buffer.from(data, 'base64').toString('ascii');
+
+        var output = "";
+        var index = 0;
+        while (data.indexOf("\r", index) >= 0) {
+            var line = data.substr(index, data.indexOf("\r", index) - index);
+            index = data.indexOf("\r", index) + 2;
+            var isNotSpace = false;
+            var len = line.length;
+            for (var i = 0; i < len; i++) {
+                if (isNotSpace == false) {
+                    if (line[i] != ' ')//if not space
+                    {
+                        isNotSpace = true;
+                        output += line[i];
+                    }
+                }
+                else
+                    output += line[i];
+            }
+            if (len > 1)
+                output += "\r";
+        }
+        return callback(output);
+    });
+}
+
+function RandomTextId(type, callback) {
+    con.query("SELECT id FROM texts WHERE type='" + type + "' ORDER BY RAND();", function (err, result) {
+        if(result.length>0)
+            return callback(result[0]["id"]);
+        else
+            return callback(-1);
+    });
+}
+
+/////////////////////////////////
+
+// Classes
 
 class player {
     constructor(_playerName, _ready, _wpm, _accuracy, _characterreaches, _recordscount) {
@@ -31,26 +175,145 @@ class chat {
     }
 }
 
-class match {
-    constructor(_textType, _textId, _players, _status, _totaltime, _timer, _lifetime, _random) {
+class match 
+{
+    constructor(_textType, _textId, _players, _status, _totaltime, _timer, _lifetime, _random)
+     {
         this.textType = _textType;
         this.textId = _textId;
+        // socket and players
+        this.SOCKET_LIST = {};
         this.players = _players;
+        // Match Information
         this.status = _status;
         this.totaltime = _totaltime;
         this.timer = _timer;
         this.lifetime = _lifetime;
+        // chat
         this.chats = [];
         this.random = _random;
     }
+
+   
+	BroadCast(title,data)
+	{
+		for(var i in this.SOCKET_LIST)
+		{
+			var socket = this.SOCKET_LIST[i];
+			socket.emit(title,data);
+		}
+	}
+
+	AcceptPlayer(player)
+	{
+		player.ready = true;
+		player.socket.emit("JoinAccepted",true);
+		this.inMatchPlayerCount++;
+	}
+	
+	RejectPlayer(player)
+	{
+		player.socket.emit("JoinRejected",true);
+	}
+
+	HasPlayer(name)
+	{
+		for(let p in this.players)
+		{
+			if(name.localeCompare(this.players[p].name) == 0)
+			return true;
+		}
+		return false;
+	}
+
+	AddPlayer(player,socket)
+	{
+		player.id = Math.random();
+		socket.id = player.id;
+		console.log(this.HasPlayer(player.name));
+		if(player.name == null)
+		{
+			player.name = "Guest" + "(" + this.dummyNumber + ")";
+			this.dummyNumber++;
+		}
+		else if(this.HasPlayer(player.name))
+		{
+			player.name = player.name + "(" + this.dummyNumber + ")";
+			this.dummyNumber++;
+		}
+
+		socket.number = player.name;
+		this.players[player.id] = player;
+		this.SOCKET_LIST[player.id] = socket;
+	}
+
+	RemovePlayer(id)
+	{
+		delete this.SOCKET_LIST[id];
+		delete this.players[id];
+	}
+
+	StartCountDown()
+	{
+		this.BroadCast('CountDown',true);
+		this.status = WAITING;
+		let x = 10;
+		let count = setInterval(() => 
+		{
+			console.log(x);
+			x--;
+			if(x==-1)
+			{
+				this.StartMatch();
+				clearInterval(count);
+			}
+		}, 1000);
+	}
+
+	StartMatch()
+	{
+		this.status = RUNNING;
+		this.BroadCast('MatchStart',true);
+		let x = this.timer;
+		let count = setInterval(() => 
+		{
+			console.log("Match Will end in" + x);
+			x--;
+			if(x==-1)
+			{
+				this.FinishMatch();
+				clearInterval(count);
+			}
+		}, 1000);
+	}
+
+	UpdateMatch()
+	{
+
+	}
+
+	FinishMatch()
+	{
+		this.BroadCast('MatchEnd',true);
+	}
+
+    LifeTime()
+    {
+        setTimeout(() => 
+        {
+            delete this;
+        }, this.lifetime);
+    }
 }
 
-var io = require('socket.io')(serv, {});
+/////////////////////////////////
+
 var matches = {};
 
 
 setInterval(() => {
-    for (var i in matches) {
+    for (var i in matches) 
+    {
         matches[i].lifetime -= 0.1;
         if (matches[i].lifetime < 0) {
             delete matches[i];
@@ -104,124 +367,12 @@ setInterval(() => {
     }
 }, 100);
 
-var mysql = require('mysql');
-var con = mysql.createConnection({
-    host: "sql151.main-hosting.eu",
-    user: "u245000204_msh",
-    database: "u245000204_msh",
-    password: "fa0dZqvM1nJZ"
-});
 
-con.connect(function (err) {
-    if (err)
-        console.log("DB   " + err);
-    else
-        console.log("DB connected");
-});
 
-var fs = require('fs');
-function TargetTextFileToDB(filename, type) {
-    fs.readFile(filename, 'utf8', function (err, data) {
-        var output = "";
-        var lines = data.split('\n');
-        for (var i = 0; i < lines.length; i++) {
-            var line = lines[i];
-            line = line.replace(/[\t]/, "    ");
-            for (var j = 0; j < line.length; j++)
-                output += line[j];
-        }
-        output = Buffer.from(data, 'ascii').toString('base64');
-        var sql = "INSERT INTO texts (text, type) VALUES ('" + output + "', '" + type + "');";
-        con.query(sql);
-    });
-}
-//TargetTextFileToDB("code.txt", "code");
 
-function StringToHTML(textid, callback) {
-    var sql = "SELECT text FROM texts WHERE id=" + textid + ";";
-    output = "";
-    con.query(sql, function (err, result) {
-        var data = result[0]["text"];
-        data = Buffer.from(data, 'base64').toString('ascii');
 
-        output = "<pre id='targetTypedText'>";
-        var index = 0;
-        var firstchar = true;
-        while (data.indexOf("\r", index) >= 0) {
-            var line = data.substr(index, data.indexOf("\r", index) - index);
-            index = data.indexOf("\r", index) + 2;
-            isNotSpace = false;
-            len = line.length;
-            for (var i = 0; i < len; i++) {
-                if (isNotSpace == false) {
-                    if (line[i] != ' ')//if not space
-                    {
-                        isNotSpace = true;
-                        if (firstchar) {
-                            output += "<span class='normal-color active'>" + line[i] + "</span>";
-                            firstchar = false;
-                        }
-                        else
-                            output += "<span class='normal-color'>" + line[i] + "</span>";
-                    }
-                    else
-                        output += " ";
-                }
-                else {
-                    if (line[i] == ' ')
-                        output += "<span class='normal-color'>" + "<span class='space'>" + line[i] + "</span></span>";
-                    else
-                        output += "<span class='normal-color'>" + line[i] + "</span>";
-                }
-            }
-            if (len > 1)
-                output += "<span class='normal-color enter'><span class='enter'>&#9661;</span></span>";
-            output += "\r";
-        }
-        output += '</pre>';
-        return callback(output);
-    });
-}
 
-function StringToString(textid, callback) {
-    var sql = "SELECT text FROM texts WHERE id=" + textid + ";";
-    con.query(sql, function (err, result) {
-        var data = result[0]["text"];
-        data = Buffer.from(data, 'base64').toString('ascii');
 
-        var output = "";
-        var index = 0;
-        while (data.indexOf("\r", index) >= 0) {
-            var line = data.substr(index, data.indexOf("\r", index) - index);
-            index = data.indexOf("\r", index) + 2;
-            var isNotSpace = false;
-            var len = line.length;
-            for (var i = 0; i < len; i++) {
-                if (isNotSpace == false) {
-                    if (line[i] != ' ')//if not space
-                    {
-                        isNotSpace = true;
-                        output += line[i];
-                    }
-                }
-                else
-                    output += line[i];
-            }
-            if (len > 1)
-                output += "\r";
-        }
-        return callback(output);
-    });
-}
-
-function RandomTextId(type, callback) {
-    con.query("SELECT id FROM texts WHERE type='" + type + "' ORDER BY RAND();", function (err, result) {
-        if(result.length>0)
-            return callback(result[0]["id"]);
-        else
-            return callback(-1);
-    });
-}
 
 function CreateNewMatch(type, israndom, callback)
 {
@@ -232,7 +383,8 @@ function CreateNewMatch(type, israndom, callback)
     });
 }
 
-io.sockets.on('connection', function (socket) {
+io.sockets.on('connection', function (socket) 
+{
     console.log('socket connection ' + socket.id);
     socket.emit('ResponsePlayerId', { playerid: socket.id });
 
@@ -320,7 +472,8 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('SendPlayerData', function (data) {
         matches[data.matchid].lifetime = 10;
-        if (matches[data.matchid].status == "running") {
+        if (matches[data.matchid].status == "running")
+        {
             matches[data.matchid].players[socket.id].characterreaches = data.characterreaches;
             matches[data.matchid].players[socket.id].recordscount = data.recordscount;
             if (matches[data.matchid].totaltime - matches[data.matchid].timer > 0)

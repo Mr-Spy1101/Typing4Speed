@@ -45,3 +45,50 @@ body
     color: wheat;
     word-wrap: break-word;
 }
+
+.middle-box
+{
+    position: fixed;
+    width: 25%;
+    padding: 10px;
+    top: 80px;
+    right: 120px;
+    left: 120px;
+    height : auto;
+    margin: 0px auto;
+    outline: 2px solid rgba(1, 181, 132,0.5);
+    background: rgba(0, 0, 0, 0.822);
+   
+    
+}
+
+#scoreboxcontainer{
+
+   
+    -ms-overflow-style: none;
+    height:250px;
+  
+}
+
+.LastScore
+{
+    display: block;
+
+
+}
+.LastScore h3
+{
+    display: inline-flex;
+    margin: 10px 10px;  
+}
+
+#Endscorebox
+{
+    margin : 0 auto;
+    width: 220px;
+    height: 315px;
+    overflow: hidden;
+}
+#Endscorebox h4{
+    display: inline;
+}
