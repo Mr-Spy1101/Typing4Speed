@@ -15,7 +15,7 @@ app.get('/', function (req, res) {
 });
 app.use('/client', express.static(__dirname + '/client'));
 app.use(express.static(__dirname));
-serv.listen(8080);//listen to port 8080
+serv.listen(process.env.PORT || 8000)//listen to port 8080
 
 var io = require('socket.io')(serv, {});
 
