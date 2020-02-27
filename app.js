@@ -25,10 +25,10 @@ var io = require('socket.io')(serv, {});
 
 var mysql = require('mysql');
 var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    database: "typing4speed",
-    password: ""
+    host: "sql240.main-hosting.eu",
+    user: "u300478706_typing4speed",
+    database: "u300478706_typing4speed",
+    password: "g&:43rv5"
 });
 
 con.connect(function (err) {
