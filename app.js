@@ -386,7 +386,7 @@ function CreateNewMatch(type, israndom, callback)
 io.sockets.on('connection', function (socket) 
 {
     console.log('socket connection ' + socket.id);
-    //socket.emit('ResponsePlayerId', { playerid: socket.id });
+    socket.emit('ResponsePlayerId', { playerid: socket.id });
 
     socket.on('RequestJoinPlayerToMatch', function (data) {
         var joinstatus = data.matchid in matches;
