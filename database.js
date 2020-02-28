@@ -20,11 +20,11 @@ int main() {
     const int ArraySize = 5;
     int Array1[ArraySize] = {10, 9, 3, 5, 1};
 
-    cout<<"Before Sorting:\n\n";
+    cout<<"Before Sorting:\\n\\n";
     PrintArray(Array1, ArraySize);
 
     BubbleSort(Array1, ArraySize);
-    cout<<"\nAfterSorting:\n\n";
+    cout<<"\nAfterSorting:\\n\\n";
     PrintArray(Array1, ArraySize);
 
     return 0;
