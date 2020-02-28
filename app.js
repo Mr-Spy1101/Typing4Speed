@@ -15,7 +15,7 @@ app.get('/', function (req, res) {
 });
 app.use('/client', express.static(__dirname + '/client'));
 app.use(express.static(__dirname));
-serv.listen(process.env.PORT || 8567)//listen to port 8080
+serv.listen(process.env.PORT || 8000)//listen to port 8080
 
 var io = require('socket.io')(serv, {});
 
@@ -24,6 +24,7 @@ var io = require('socket.io')(serv, {});
 // connecting to the database
 
 var mysql = require('mysql');
+/*
 var con = mysql.createConnection({
     host: "sql240.main-hosting.eu",
     user: "u300478706_typing4speed",
@@ -37,6 +38,19 @@ con.connect(function (err) {
     else
         console.log("DB connected");
 });
+*/
+
+let con = mysql.createPool(
+    {
+        connectionLimit : 100,
+        host : 'sql240.main-hosting.eu',
+        port : 3306,
+        user : 'u300478706_typing4speed',
+        password : 'g&:43rv5',
+        database : 'u300478706_typing4speed',
+        multipleStatements: true
+    }
+);
 
 /////////////////////////////////
 
@@ -457,7 +471,7 @@ io.sockets.on('connection', function (socket)
     socket.on('RequestTextHTML', function (data) {
         if(!(data.matchid in matches))
             return;
-            
+
         StringToHTML(matches[data.matchid].textId, function (result) {
             socket.emit('ResponseTextHTML', {
                 html: result
