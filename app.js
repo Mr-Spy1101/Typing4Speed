@@ -471,6 +471,9 @@ io.sockets.on('connection', function (socket)
     });
 
     socket.on('SendPlayerData', function (data) {
+        if(!(data.matchid in matches))
+            return;
+
         matches[data.matchid].lifetime = 10;
         if (matches[data.matchid].status == "running")
         {
@@ -488,16 +491,26 @@ io.sockets.on('connection', function (socket)
     });
 
     socket.on('ResuestAddChatToMatch', function(data){
+        if(!(data.matchid in matches))
+            return;
+
         matches[data.matchid].chats.push(new chat(data.playername, data.message));
     });
 
     socket.on('RequestMatchData', function (data) {
+        if(!(data.matchid in matches))
+            return;
+
         socket.emit('ResponseMatchData', {
             matchdata: matches[data.matchid]
         });
     });
 
     socket.on('SetPlayerReady', function (data) {
+        if(!(data.matchid in matches))
+            return;
+
+            
         matches[data.matchid].players[socket.id].ready = true;
     });
 
