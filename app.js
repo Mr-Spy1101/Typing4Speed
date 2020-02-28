@@ -92,7 +92,7 @@ function StringToString(data, callback)
 
 function RandomTextId(type, callback) 
 {
-    callback(Math.floor(Math.random() * (db[type].length)));
+    return callback(Math.floor(Math.random() * (db[type].length)));
 }
 
 /////////////////////////////////
