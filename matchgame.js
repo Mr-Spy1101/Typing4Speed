@@ -57,6 +57,7 @@ function addKeyTyped(e) {
   if (index == 0)
     timer = 0;
 
+  
   var keycode = e.keycode || e.which;
   if (keycode == targetString.charCodeAt(index) && incorrectclicks == 0) {
     if(keycode == 13)
@@ -174,6 +175,7 @@ socket.on('ResponseTextHTML', function (data) {
 });
 
 socket.on('ResponseTextString', function (data) {
+
   targetString = data.text;
 });
 
