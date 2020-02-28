@@ -31,7 +31,7 @@ function StringToHTML(data, callback)
     var firstchar = true;
     while (data.indexOf("\n", index) >= 0) {
         var line = data.substr(index, data.indexOf("\n", index) - index);
-        index = data.indexOf("\n", index) + 2;
+        index = data.indexOf("\n", index) + 1;
         isNotSpace = false;
         len = line.length;
         for (var i = 0; i < len; i++) {
@@ -70,7 +70,7 @@ function StringToString(data, callback)
     var index = 0;
     while (data.indexOf("\n", index) >= 0) {
         var line = data.substr(index, data.indexOf("\n", index) - index);
-        index = data.indexOf("\n", index) + 2;
+        index = data.indexOf("\n", index) + 1;
         var isNotSpace = false;
         var len = line.length;
         for (var i = 0; i < len; i++) {
