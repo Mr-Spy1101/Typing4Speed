@@ -455,6 +455,9 @@ io.sockets.on('connection', function (socket)
     });
 
     socket.on('RequestTextHTML', function (data) {
+        if(!(data.matchid in matches))
+            return;
+            
         StringToHTML(matches[data.matchid].textId, function (result) {
             socket.emit('ResponseTextHTML', {
                 html: result
@@ -463,6 +466,9 @@ io.sockets.on('connection', function (socket)
     });
 
     socket.on('RequestTextString', function (data) {
+        if(!(data.matchid in matches))
+            return;
+
         StringToString(matches[data.matchid].textId, function (result) {
             socket.emit('ResponseTextString', {
                 text: result
@@ -510,7 +516,7 @@ io.sockets.on('connection', function (socket)
         if(!(data.matchid in matches))
             return;
 
-            
+
         matches[data.matchid].players[socket.id].ready = true;
     });
 
