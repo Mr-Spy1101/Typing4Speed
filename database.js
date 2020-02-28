@@ -1,9 +1,9 @@
 let plain = 
 [
     `cry bird weight name ever hand told just rock noun call eye
-    school head learn kind red write produce as use white our
-    by friend surface mountain stop plain happen been once face
-    set each three move boy
+school head learn kind red write produce as use white our
+by friend surface mountain stop plain happen been once face
+set each three move boy
     `
 ];
 
@@ -53,17 +53,17 @@ int main() {
     `long long mem[N][N / 2 + 10][N / 2 + 10];
 int a[N], b[N];
 long long solve(int ind, int x, int y) {
-    if (x == 0 && y == 0)
-        return 0;
-    if (ind == n || x < 0 || y < 0)
-        return 1e9;
-    long long &ret = mem[ind][x][y];
-    if (~ret)
-        return ret;
-    long long ch1 = b[ind] + solve(ind + 1, x - 1, y);
-    long long ch2 = a[ind] + solve(ind + 1, x, y - 1);
-    long long ch3 = solve(ind + 1, x, y);
-    return ret = min(ch3, min(ch1, ch2));
+if (x == 0 && y == 0)
+    return 0;
+if (ind == n || x < 0 || y < 0)
+    return 1e9;
+long long &ret = mem[ind][x][y];
+if (~ret)
+    return ret;
+long long ch1 = b[ind] + solve(ind + 1, x - 1, y);
+long long ch2 = a[ind] + solve(ind + 1, x, y - 1);
+long long ch3 = solve(ind + 1, x, y);
+return ret = min(ch3, min(ch1, ch2));
 }
 `
 ];
