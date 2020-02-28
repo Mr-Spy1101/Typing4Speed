@@ -494,19 +494,26 @@ io.sockets.on('connection', function (socket)
         if(!(data.matchid in matches))
             return;
 
-        matches[data.matchid].lifetime = 10;
-        if (matches[data.matchid].status == "running")
+        try
         {
-            matches[data.matchid].players[socket.id].characterreaches = data.characterreaches;
-            matches[data.matchid].players[socket.id].recordscount = data.recordscount;
-            if (matches[data.matchid].totaltime - matches[data.matchid].timer > 0)
-                matches[data.matchid].players[socket.id].wpm = data.characterreaches * 60 / 5 / (matches[data.matchid].totaltime - matches[data.matchid].timer);
-            else
-                matches[data.matchid].players[socket.id].wpm = 0;
-            if (data.recordscount > 0)
-                matches[data.matchid].players[socket.id].accuracy = data.characterreaches / data.recordscount * 100;
-            else
-                matches[data.matchid].players[socket.id].accuracy = 0;
+            matches[data.matchid].lifetime = 10;
+            if (matches[data.matchid].status == "running")
+            {
+                matches[data.matchid].players[socket.id].characterreaches = data.characterreaches;
+                matches[data.matchid].players[socket.id].recordscount = data.recordscount;
+                if (matches[data.matchid].totaltime - matches[data.matchid].timer > 0)
+                    matches[data.matchid].players[socket.id].wpm = data.characterreaches * 60 / 5 / (matches[data.matchid].totaltime - matches[data.matchid].timer);
+                else
+                    matches[data.matchid].players[socket.id].wpm = 0;
+                if (data.recordscount > 0)
+                    matches[data.matchid].players[socket.id].accuracy = data.characterreaches / data.recordscount * 100;
+                else
+                    matches[data.matchid].players[socket.id].accuracy = 0;
+            }
+        }
+        catch(err)
+        {
+
         }
     });
 
@@ -514,30 +521,58 @@ io.sockets.on('connection', function (socket)
         if(!(data.matchid in matches))
             return;
 
-        matches[data.matchid].chats.push(new chat(data.playername, data.message));
+        try
+        {
+            matches[data.matchid].chats.push(new chat(data.playername, data.message));
+        }
+        catch(err)
+        {
+
+        }
     });
 
     socket.on('RequestMatchData', function (data) {
         if(!(data.matchid in matches))
             return;
 
-        socket.emit('ResponseMatchData', {
-            matchdata: matches[data.matchid]
-        });
+            try
+            {
+                socket.emit('ResponseMatchData', {
+                    matchdata: matches[data.matchid]
+                });
+            }
+            catch(err)
+            {
+
+            }
     });
 
     socket.on('SetPlayerReady', function (data) {
         if(!(data.matchid in matches))
             return;
 
+        try
+        {
+            matches[data.matchid].players[socket.id].ready = true;
+        }
+        catch(err)
+        {
 
-        matches[data.matchid].players[socket.id].ready = true;
+        }
     });
 
     socket.on('disconnect', function () {
         console.log("player deleted");
-        for (i in matches)
-            delete matches[i].players[socket.id];
+
+        try
+        {
+            for (i in matches)
+                delete matches[i].players[socket.id];
+        }
+        catch(err)
+        {
+
+        }
     });
 
 });
