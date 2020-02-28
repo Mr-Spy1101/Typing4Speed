@@ -23,8 +23,9 @@ var io = require('socket.io')(serv, {});
 
 // connecting to the database
 
-var mysql = require('mysql');
 /*
+var mysql = require('mysql');
+
 var con = mysql.createConnection({
     host: "sql240.main-hosting.eu",
     user: "u300478706_typing4speed",
@@ -38,7 +39,7 @@ con.connect(function (err) {
     else
         console.log("DB connected");
 });
-*/
+
 
 let con = mysql.createPool(
     {
@@ -51,11 +52,13 @@ let con = mysql.createPool(
         multipleStatements: true
     }
 );
+*/
 
 /////////////////////////////////
 
 // adding to database
 
+/*
 var fs = require('fs');
 function TargetTextFileToDB(filename, type) {
     fs.readFile(filename, 'utf8', function (err, data) {
@@ -73,12 +76,53 @@ function TargetTextFileToDB(filename, type) {
     });
 }
 //TargetTextFileToDB("code.txt", "code");
+*/
 
 /////////////////////////////////
 
 // Importing Files from Database
 function StringToHTML(textid, callback)
  {
+    data = texts[textid];
+    data = Buffer.from(data, 'base64').toString('ascii');
+
+    output = "<pre id='targetTypedText'>";
+    var index = 0;
+    var firstchar = true;
+    while (data.indexOf("\r", index) >= 0) {
+        var line = data.substr(index, data.indexOf("\r", index) - index);
+        index = data.indexOf("\r", index) + 2;
+        isNotSpace = false;
+        len = line.length;
+        for (var i = 0; i < len; i++) {
+            if (isNotSpace == false) {
+                if (line[i] != ' ')//if not space
+                {
+                    isNotSpace = true;
+                    if (firstchar) {
+                        output += "<span class='normal-color active'>" + line[i] + "</span>";
+                        firstchar = false;
+                    }
+                    else
+                        output += "<span class='normal-color'>" + line[i] + "</span>";
+                }
+                else
+                    output += " ";
+            }
+            else {
+                if (line[i] == ' ')
+                    output += "<span class='normal-color'>" + "<span class='space'>" + line[i] + "</span></span>";
+                else
+                    output += "<span class='normal-color'>" + line[i] + "</span>";
+            }
+        }
+        if (len > 1)
+            output += "<span class='normal-color enter'><span class='enter'>&#9661;</span></span>";
+        output += "\r";
+    }
+    output += '</pre>';
+    return callback(output);
+     /*
     var sql = "SELECT text FROM texts WHERE id=" + textid + ";";
     output = "";
     con.query(sql, function (err, result) {
@@ -122,10 +166,37 @@ function StringToHTML(textid, callback)
         output += '</pre>';
         return callback(output);
     });
+    */
 }
 
 function StringToString(textid, callback)
 {
+    data = texts[textid];
+    data = Buffer.from(data, 'base64').toString('ascii');
+
+    var output = "";
+    var index = 0;
+    while (data.indexOf("\r", index) >= 0) {
+        var line = data.substr(index, data.indexOf("\r", index) - index);
+        index = data.indexOf("\r", index) + 2;
+        var isNotSpace = false;
+        var len = line.length;
+        for (var i = 0; i < len; i++) {
+            if (isNotSpace == false) {
+                if (line[i] != ' ')//if not space
+                {
+                    isNotSpace = true;
+                    output += line[i];
+                }
+            }
+            else
+                output += line[i];
+        }
+        if (len > 1)
+            output += "\r";
+    }
+    return callback(output);
+    /*
     var sql = "SELECT text FROM texts WHERE id=" + textid + ";";
     con.query(sql, function (err, result) {
         var data = result[0]["text"];
@@ -154,15 +225,19 @@ function StringToString(textid, callback)
         }
         return callback(output);
     });
+    */
 }
 
 function RandomTextId(type, callback) {
+    return callback(45);
+    /*
     con.query("SELECT id FROM texts WHERE type='" + type + "' ORDER BY RAND();", function (err, result) {
         if(result.length>0)
             return callback(result[0]["id"]);
         else
             return callback(-1);
     });
+    */
 }
 
 /////////////////////////////////
@@ -323,6 +398,11 @@ class match
 /////////////////////////////////
 
 var matches = {};
+var texts = {"45": "I2luY2x1ZGUgPGlvc3RyZWFtPg0KI2luY2x1ZGUgPGlvbWFuaXA+DQp1c2luZyBuYW1lc3BhY2Ugc3RkOw0KDQp2b2lkIFByaW50QXJyYXkoaW50IEFycmF5TmFtZVtdLCBjb25zdCBpbnQgQXJyYXlTaXplKTsNCnZvaWQgQnViYmxlU29ydChpbnQgQXJyYXlOYW1lW10sIGNvbnN0IGludCBBcnJheVNpemUpOw0KDQppbnQgbWFpbigpIHsNCiAgICBjb25zdCBpbnQgQXJyYXlTaXplID0gNTsNCiAgICBpbnQgQXJyYXkxW0FycmF5U2l6ZV0gPSB7MTAsIDksIDMsIDUsIDF9Ow0KDQogICAgY291dDw8IkJlZm9yZSBTb3J0aW5nOlxuXG4iOw0KICAgIFByaW50QXJyYXkoQXJyYXkxLCBBcnJheVNpemUpOw0KDQogICAgQnViYmxlU29ydChBcnJheTEsIEFycmF5U2l6ZSk7DQogICAgY291dDw8IlxuQWZ0ZXJTb3J0aW5nOlxuXG4iOw0KICAgIFByaW50QXJyYXkoQXJyYXkxLCBBcnJheVNpemUpOw0KDQogICAgcmV0dXJuIDA7DQp9DQo=", 
+             "95": "Y3J5IGJpcmQgd2VpZ2h0IG5hbWUgZXZlciBoYW5kIHRvbGQganVzdCByb2NrIG5vdW4gY2FsbCBleWUNCnNjaG9vbCBoZWFkIGxlYXJuIGtpbmQgcmVkIHdyaXRlIHByb2R1Y2UgYXMgdXNlIHdoaXRlIG91cg0KYnkgZnJpZW5kIHN1cmZhY2UgbW91bnRhaW4gc3RvcCBwbGFpbiBoYXBwZW4gYmVlbiBvbmNlIGZhY2UNCnNldCBlYWNoIHRocmVlIG1vdmUgYm95DQo=",
+             "97": "dm9pZCBCdWJibGVTb3J0KGludCBBcnJheU5hbWVbXSwgY29uc3QgaW50IEFycmF5U2l6ZSl7DQogICAgaW50IFRlbXA7DQogICAgYm9vbCBJc0ZvdW5kID0gZmFsc2U7DQogICAgZm9yIChpbnQgaSA9IDE7IGkgPCBBcnJheVNpemU7IGkrKykNCiAgICB7DQogICAgICAgIGZvciAoaW50IGogPSAwOyBqIDwgQXJyYXlTaXplIC0gaTsgaisrKQ0KICAgICAgICB7DQogICAgICAgICAgICBpZiAoQXJyYXlOYW1lW2pdID4gQXJyYXlOYW1lW2ogKyAxXSkNCiAgICAgICAgICAgIHsNCiAgICAgICAgICAgICAgICBUZW1wID0gQXJyYXlOYW1lW2pdOw0KICAgICAgICAgICAgICAgIEFycmF5TmFtZVtqXSA9IEFycmF5TmFtZVtqICsgMV07DQogICAgICAgICAgICAgICAgQXJyYXlOYW1lW2ogKyAxXSA9IFRlbXA7DQogICAgICAgICAgICAgICAgSXNGb3VuZCA9IHRydWU7DQogICAgICAgICAgICB9DQogICAgICAgIH0NCiAgICAgICAgaWYgKCFJc0ZvdW5kKQ0KICAgICAgICAgICAgYnJlYWs7DQogICAgfQ0KfQ0K",
+             "98": "I2luY2x1ZGUgPGlvc3RyZWFtPg0KI2luY2x1ZGUgPGlvbWFuaXA+DQp1c2luZyBuYW1lc3BhY2Ugc3RkOw0KDQp2b2lkIFByaW50QXJyYXkoaW50IEFycmF5TmFtZVtdLCBjb25zdCBpbnQgQXJyYXlTaXplKTsNCnZvaWQgQnViYmxlU29ydChpbnQgQXJyYXlOYW1lW10sIGNvbnN0IGludCBBcnJheVNpemUpOw0KDQppbnQgbWFpbigpIHsNCiAgICBjb25zdCBpbnQgQXJyYXlTaXplID0gNTsNCiAgICBpbnQgQXJyYXkxW0FycmF5U2l6ZV0gPSB7MTAsIDksIDMsIDUsIDF9Ow0KDQogICAgY291dDw8IkJlZm9yZSBTb3J0aW5nOlxuXG4iOw0KICAgIFByaW50QXJyYXkoQXJyYXkxLCBBcnJheVNpemUpOw0KDQogICAgQnViYmxlU29ydChBcnJheTEsIEFycmF5U2l6ZSk7DQogICAgY291dDw8IlxuQWZ0ZXJTb3J0aW5nOlxuXG4iOw0KICAgIFByaW50QXJyYXkoQXJyYXkxLCBBcnJheVNpemUpOw0KDQogICAgcmV0dXJuIDA7DQp9DQo=",
+             "100": "bG9uZyBsb25nIG1lbVtOXVtOIC8gMiArIDEwXVtOIC8gMiArIDEwXTsNCmludCBuLCBtOw0KaW50IGFbTl0sIGJbTl07DQpsb25nIGxvbmcgc29sdmUoaW50IGluZCwgaW50IHgsIGludCB5KSB7DQogICAgaWYgKHggPT0gMCAmJiB5ID09IDApDQogICAgICAgIHJldHVybiAwOw0KICAgIGlmIChpbmQgPT0gbiB8fCB4IDwgMCB8fCB5IDwgMCkNCiAgICAgICAgcmV0dXJuIDFlOTsNCiAgICBsb25nIGxvbmcgJnJldCA9IG1lbVtpbmRdW3hdW3ldOw0KICAgIGlmICh+cmV0KQ0KICAgICAgICByZXR1cm4gcmV0Ow0KICAgIGxvbmcgbG9uZyBjaDEgPSBiW2luZF0gKyBzb2x2ZShpbmQgKyAxLCB4IC0gMSwgeSk7DQogICAgbG9uZyBsb25nIGNoMiA9IGFbaW5kXSArIHNvbHZlKGluZCArIDEsIHgsIHkgLSAxKTsNCiAgICBsb25nIGxvbmcgY2gzID0gc29sdmUoaW5kICsgMSwgeCwgeSk7DQogICAgcmV0dXJuIHJldCA9IG1pbihjaDMsIG1pbihjaDEsIGNoMikpOw0KfQ0K"};
 
 
 setInterval(() => {
@@ -380,10 +460,6 @@ setInterval(() => {
     
     }
 }, 100);
-
-
-
-
 
 
 
