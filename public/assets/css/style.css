@@ -1,7 +1,7 @@
 
 body
 {
-	background-image: url("1.png");
+	background-image: url("../img/background/GamePage.png");
 	background-repeat: no-repeat;
 	background-size: 100% 100%; 
 	min-height: 670px;
