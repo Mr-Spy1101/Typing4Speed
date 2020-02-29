@@ -32,7 +32,6 @@ app.get('/game', function (req, res) {
 });
 
 
-app.use(express.static(__dirname));
 serv.listen(process.env.PORT || 8000)//listen to port 8080
 
 var io = require('socket.io')(serv, {});
@@ -200,9 +199,9 @@ setInterval(() => {
 function CreateNewMatch(type, israndom, callback)
 {
     RandomTextId(type, function(textid){
-        matchid = Date.now();
-        matches[matchid] = new match(type, textid, {}, "waiting", 60, 60, 20, israndom);
-        return callback(matchid);
+        m = new match(type, textid, 60, israndom);
+        matches[m.id] = m;
+        return callback(m.id);
     });
 }
 
@@ -385,5 +384,5 @@ io.sockets.on('connection', function (socket)
 
         }
     });
-
+    
 });

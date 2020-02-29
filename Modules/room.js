@@ -1,17 +1,18 @@
 module.exports = class Room 
 {
-    constructor(_textType, _textId, _players, _status, _totaltime, _timer, _lifetime, _random)
+    constructor(_textType, _textId, _totaltime, _random)
      {
+		this.id = this.randomId(5);
         this.textType = _textType;
         this.textId = _textId;
         // socket and players
         this.SOCKET_LIST = {};
-        this.players = _players;
+        this.players = {};
         // Match Information
-        this.status = _status;
+        this.status = "waiting";
         this.totaltime = _totaltime;
-        this.timer = _timer;
-        this.lifetime = _lifetime;
+        this.timer = this.totaltime;
+        this.lifetime = 60000;
         // chat
         this.chats = [];
         this.random = _random;
@@ -126,5 +127,23 @@ module.exports = class Room
         {
             delete this;
         }, this.lifetime);
-    }
+	}
+	
+	changeText(type) 
+	{
+		this.textId = Math.floor(Math.random() * (db[type].length));
+	}
+	
+	// make it solves collision
+	randomId(length) 
+	{
+		var result           = '';
+		var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		var charactersLength = characters.length;
+		for ( var i = 0; i < length; i++ ) {
+		   result += characters.charAt(Math.floor(Math.random() * charactersLength));
+		}
+		
+		return result;
+	}
 }
