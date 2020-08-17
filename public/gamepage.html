@@ -179,8 +179,7 @@
 
   $("#letsgomode12btn").click(function () {
     if (document.getElementById("formusername").value == "") {
-      alert("please enter your name to start");
-      return;
+      document.getElementById("formusername").value = 'Guest' + (Math.floor(Math.random() * 10000) + 100);
     }
     if (selectedMode == 0) {
       alert("please select a mode to start");
@@ -219,8 +218,7 @@
 
   $("#letsgocreatematchbtn").click(function () {
     if (document.getElementById("formusername").value == "") {
-      alert("please enter your name to start");
-      return;
+      document.getElementById("formusername").value = 'Guest' + (Math.floor(Math.random() * 10000) + 100);
     }
     if (selectedMode == 0) {
       alert("please select a mode to start");
@@ -248,8 +246,7 @@
 
   $("#jointoroombtn").click(function () {
     if (document.getElementById("formusername").value == "") {
-      alert("please enter your name to start");
-      return;
+      document.getElementById("formusername").value = 'Guest' + (Math.floor(Math.random() * 10000) + 100);
     }
     if (selectedMode == 0) {
       alert("please select a mode to start");
