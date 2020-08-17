@@ -88,7 +88,6 @@ let java =
         }
         return flag;
     }
-}
 `
 ];
 
