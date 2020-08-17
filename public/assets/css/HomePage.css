@@ -1,5 +1,5 @@
 body {
-    background-color: #343434;
+    background-color: #232323;
 }
 #mainrow
 {
@@ -42,7 +42,6 @@ body {
 #features
 {
     margin-top : 50px;
-    background-image: url("../img/background/GamePage.jpg");
     list-style: none;
     color: white;
    
