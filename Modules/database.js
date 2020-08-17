@@ -69,12 +69,41 @@ int main() {
 
 let java = 
 [
-
+`public class Prime {
+    public static void main(String[] args) {
+        int low = 20, high = 50;
+        while (low < high) {
+            if(checkPrimeNumber(low))
+                System.out.print(low + " ");
+            ++low;
+        }
+    }
+    public static boolean checkPrimeNumber(int num) {
+        boolean flag = true;
+        for(int i = 2; i <= num/2; ++i) {
+            if(num % i == 0) {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    }
+}
+`
 ];
 
 let python = 
 [
-
+`def jpeg_res(filename):
+with open(filename,'rb') as img_file:
+   img_file.seek(163)
+   a = img_file.read(2)
+   height = (a[0] << 8) + a[1]
+   a = img_file.read(2)
+   width = (a[0] << 8) + a[1]
+print("The resolution of the image is",width,"x",height)
+jpeg_res("img1.jpg")
+`
 ];
 
 module.exports = 
