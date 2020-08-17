@@ -94,28 +94,22 @@ let java =
 
 let python = 
 [
-`print("Select operation.")
-print("1.Add")
-print("2.Subtract")
-print("3.Multiply")
-print("4.Divide")
+`list1 = [10, 20, 4, 45, 99]
 
-while True:
-    choice = input("Enter choice(1/2/3/4): ")
-    if choice in ('1', '2', '3', '4'):
-        num1 = float(input("Enter first number: "))
-        num2 = float(input("Enter second number: "))
-        if choice == '1':
-            print(num1, "+", num2, "=", add(num1, num2))
-        elif choice == '2':
-            print(num1, "-", num2, "=", subtract(num1, num2))
-        elif choice == '3':
-            print(num1, "*", num2, "=", multiply(num1, num2))
-        elif choice == '4':
-            print(num1, "/", num2, "=", divide(num1, num2))
-        break
+mx = max(list1[0],list1[1])
+secondmax = min(list1[0],list1[1])
+n = len(list1)
+for i in range(2,n):
+    if list1[i]>mx:
+        secondmax=mx
+        mx=list1[i]
+    elif list1[i]>secondmax and mx != list1[i]:
+        secondmax=list1[i]
     else:
-        print("Invalid Input")
+        if secondmax == mx:
+            secondmax = list1[i]
+
+print("Second highest number is : ",str(secondmax))
 `
 ];
 
